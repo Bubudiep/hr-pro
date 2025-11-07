@@ -14,7 +14,7 @@ import { DiCodeigniter } from "react-icons/di";
 
 // Hàm helper để xác định class cho NavLink (link nào đang active)
 const getNavLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `flex flex-col w-auto h-14 duration-300 mt-1 gap-0.5 items-center justify-center rounded-lg transition-all ` +
+  `flex flex-col w-14 h-14 duration-300 mt-1 gap-0.5 items-center justify-center rounded-lg transition-all ` +
   (isActive ? "text-blue-600" : "text-gray-500 hover:text-gray-800");
 const BottomTaskbar: React.FC = () => {
   return (
@@ -31,7 +31,7 @@ const BottomTaskbar: React.FC = () => {
           <BsUiChecks className="text-[20px]" />
           <span className="text-[11px]">Lương</span>
         </NavLink>
-        <div className="w-14 h-14 relative flex justify-center">
+        <div className="w-16 h-14 relative flex justify-center">
           <NavLink
             to="/mobile/news"
             className={({ isActive }: { isActive: boolean }) =>

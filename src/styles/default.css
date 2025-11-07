@@ -2,3 +2,11 @@
 body {
   @apply bg-[#e6e7ed];
 }
+table {
+  td,
+  th {
+    padding: 4px;
+    border: 1px solid #0003;
+    text-align: center;
+  }
+}

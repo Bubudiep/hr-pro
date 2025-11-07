@@ -6,6 +6,7 @@ import { AuthProvider } from "../context/authContext";
 import { UserProvider } from "../context/userContext";
 import NotFoundPage from "../mobile/notFound";
 import News_index from "../mobile/news";
+import Luong_index from "../mobile/luong";
 
 const Router_all = () => {
   return (
@@ -17,6 +18,7 @@ const Router_all = () => {
             <Route path="mobile" element={<Mobile_index />}>
               <Route index element={<Navigate to="news" replace />} />
               <Route path="news" element={<News_index />}></Route>
+              <Route path="luong" element={<Luong_index />}></Route>
               <Route path="*" element={<NotFoundPage />}></Route>
             </Route>
           </Routes>

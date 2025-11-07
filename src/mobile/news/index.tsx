@@ -1,7 +1,5 @@
-import { Tooltip } from "antd";
-import React from "react";
+import { Spin, Tooltip } from "antd";
 import { FaShare, FaTrash } from "react-icons/fa";
-import { FaLocationDot, FaLocationPin } from "react-icons/fa6";
 import { FiMoreHorizontal } from "react-icons/fi";
 import BlurImage from "../../components/BlurImage";
 import { BiSolidTag } from "react-icons/bi";
@@ -15,6 +13,7 @@ const News_index = () => {
         name: "Nguyễn Văn A",
         avatar: "https://i.pravatar.cc/150?img=1",
       },
+      company: "Compal",
       emoji: "đang vui",
       location: "Bá Thiện II",
       time: "2 giờ trước",
@@ -48,30 +47,26 @@ const News_index = () => {
   ];
 
   return (
-    <div className="pb-20 flex flex-col gap-1">
+    <div className="pb-24">
       {posts.map((post) => (
-        <div key={post.id} className="bg-white shadow">
+        <div key={post.id} className="bg-white shadow mt-1">
           <div className="flex items-center p-3">
             <img
               src={post.user.avatar}
               alt={post.user.name}
-              className="w-10 h-10 rounded-full mr-3"
+              className="w-10 h-10 mr-3"
             />
-            <div>
-              <div className="flex gap-1 text-[14px] items-baseline">
+            <div className="flex flex-col">
+              <div className="flex gap-1 text-[12px] items-baseline">
                 <p className="font-semibold">{post.user.name}</p>
-                <p className="text-[#999] text-[12px]">{post?.emoji}</p>
               </div>
-              <div className="flex gap-1 items-center mt-1">
-                <span
-                  className="flex  gap-1 items-center text-[11px] text-[#21223a] p-1 py-0.5 border
-                  border-[#cccdd3] rounded-md leading-[1.3]"
-                >
-                  <FaLocationDot size={10} />
-                  {post.location}
-                </span>
-                <span className="text-xs text-gray-500">{post.time}</span>
-              </div>
+              <span className="text-gray-500 flex items-center mt-0.5 gap-1 text-[10px] leading-[1.2]">
+                {post?.company && `${post?.company}, `}
+                {post.location}
+              </span>
+              <span className="text-gray-500 text-[9px] leading-[1.3]">
+                {post.time}
+              </span>
             </div>
             <Tooltip
               trigger="click"
@@ -122,6 +117,10 @@ const News_index = () => {
           </div>
         </div>
       ))}
+      <div className="flex flex-col gap-1 p-6 items-center justify-center text-[#999] text-sm">
+        <Spin />
+        Đã hết nội dung...
+      </div>
     </div>
   );
 };

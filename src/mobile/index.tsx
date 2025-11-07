@@ -12,7 +12,7 @@ const Mobile_index = () => {
   }, []);
   return (
     <>
-      <div className="flex flex-col">
+      <div className="">
         <Outlet />
       </div>
       <BottomTaskbar />

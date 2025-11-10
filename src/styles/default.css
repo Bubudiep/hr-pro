@@ -10,9 +10,9 @@ table {
     text-align: center;
   }
 }
-/* Trong tệp CSS của bạn (ví dụ: index.css hoặc module.css) */
-
-/* 1. Container bao bọc (View Port) */
+button {
+  transition: all 0.3s;
+}
 .tab-slider-container {
   position: fixed;
   width: 100%;
@@ -21,8 +21,6 @@ table {
   height: 100vh;
   overflow: hidden; /* ⭐️ RẤT QUAN TRỌNG: Ẩn các tab bị trượt ra ngoài */
 }
-
-/* 2. Wrapper chứa tất cả các tab */
 .tab-content-wrapper {
   /* Cho phép các tab xếp cạnh nhau */
   display: flex;
@@ -53,5 +51,76 @@ table {
     @apply flex absolute bg-[white] items-center 
               justify-center w-15 h-15 -top-5 
               rounded-full shadow-xl z-1 duration-300 transition-all;
+  }
+}
+.ant-modal {
+  margin: 8px auto !important;
+  max-width: calc(100vw - 32px) !important;
+  .ant-modal-content {
+    padding: 0px !important;
+    .ant-modal-body {
+      .ant-modal-confirm-body {
+        padding: 18px 16px;
+        .ant-modal-confirm-content {
+          margin-top: 8px;
+        }
+      }
+      .ant-modal-confirm-btns {
+        display: flex;
+        border: 1px solid #0003;
+        button {
+          display: flex;
+          flex: 1;
+          margin: 0px;
+          border: 0px;
+          background-color: transparent;
+          height: 42px;
+          &.ant-btn-primary {
+            border-left: 1px solid #0003;
+            border-radius: 0px;
+            span {
+              color: #07f !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.fadeInTop {
+  animation: fadeInTop 0.3s ease-out forwards;
+  opacity: 0;
+  animation-delay: var(--animation-delay, 0s);
+}
+.fadeInBot {
+  animation: fadeInBot 0.3s ease-out forwards;
+  opacity: 0;
+  animation-delay: var(--animation-delay, 0s);
+}
+
+@keyframes fadeInTop {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeInBot {
+  animation: fadeInBot 0.3s ease-out forwards;
+  opacity: 0;
+  animation-delay: var(--animation-delay, 0s);
+}
+@keyframes fadeInBot {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

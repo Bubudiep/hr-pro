@@ -6,11 +6,12 @@ import { BiCommentDetail, BiSolidTag } from "react-icons/bi";
 import { AiOutlineLike } from "react-icons/ai";
 import { RiShareForwardFill } from "react-icons/ri";
 import New_post from "./new_post";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const News_index = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [posts, setPosts] = useState([
     {
       id: 1,
@@ -49,6 +50,90 @@ const News_index = () => {
       content: "Tàu lừ nè mọi người 🍲",
       image: "https://picsum.photos/id/233/400/300", // ảnh cố định
     },
+    {
+      id: 4,
+      user: {
+        name: "Huỳnh Đức Bắc",
+        avatar: "https://i.pravatar.cc/150?img=4",
+      },
+      emoji: "",
+      time: "5 giờ trước",
+      location: "Bá Thiện I",
+      content: "Tàu lừ nè mọi người 🍲",
+      image: "https://picsum.photos/id/234/400/300", // ảnh cố định
+    },
+    {
+      id: 5,
+      user: {
+        name: "Huỳnh Đức Bắc",
+        avatar: "https://i.pravatar.cc/150?img=5",
+      },
+      emoji: "",
+      time: "5 giờ trước",
+      location: "Bá Thiện I",
+      content: "Tàu lừ nè mọi người 🍲",
+      image: "https://picsum.photos/id/235/400/300", // ảnh cố định
+    },
+    {
+      id: 6,
+      user: {
+        name: "Huỳnh Đức Bắc",
+        avatar: "https://i.pravatar.cc/150?img=6",
+      },
+      emoji: "",
+      time: "5 giờ trước",
+      location: "Bá Thiện I",
+      content: "Tàu lừ nè mọi người 🍲",
+      image: "https://picsum.photos/id/236/400/300", // ảnh cố định
+    },
+    {
+      id: 7,
+      user: {
+        name: "Huỳnh Đức Bắc",
+        avatar: "https://i.pravatar.cc/150?img=7",
+      },
+      emoji: "",
+      time: "5 giờ trước",
+      location: "Bá Thiện I",
+      content: "Tàu lừ nè mọi người 🍲",
+      image: "https://picsum.photos/id/237/400/300", // ảnh cố định
+    },
+    {
+      id: 8,
+      user: {
+        name: "Huỳnh Đức Bắc",
+        avatar: "https://i.pravatar.cc/150?img=8",
+      },
+      emoji: "",
+      time: "5 giờ trước",
+      location: "Bá Thiện I",
+      content: "Tàu lừ nè mọi người 🍲",
+      image: "https://picsum.photos/id/238/400/300", // ảnh cố định
+    },
+    {
+      id: 9,
+      user: {
+        name: "Huỳnh Đức Bắc",
+        avatar: "https://i.pravatar.cc/150?img=9",
+      },
+      emoji: "",
+      time: "5 giờ trước",
+      location: "Bá Thiện I",
+      content: "Tàu lừ nè mọi người 🍲",
+      image: "https://picsum.photos/id/239/400/300", // ảnh cố định
+    },
+    {
+      id: 10,
+      user: {
+        name: "Huỳnh Đức Bắc",
+        avatar: "https://i.pravatar.cc/150?img=10",
+      },
+      emoji: "",
+      time: "5 giờ trước",
+      location: "Bá Thiện I",
+      content: "Tàu lừ nè mọi người 🍲",
+      image: "https://picsum.photos/id/240/400/300", // ảnh cố định
+    },
   ]);
   const fetchNewPosts = (startId = 0, limit = 6) => {
     const newPosts = [];
@@ -58,7 +143,7 @@ const News_index = () => {
         id: id,
         user: {
           name: `Người dùng mới ${id}`,
-          avatar: `https://i.pravatar.cc/150?img=${10 + id}`,
+          avatar: `https://i.pravatar.cc/150?img=${20 + id}`,
         },
         emoji: `đang làm việc`,
         company: "Compal",
@@ -86,21 +171,24 @@ const News_index = () => {
     }, 1000);
   }, [loading, hasMore, posts.length]);
   useEffect(() => {
-    const observerElement = document.getElementById("observer-target");
-    if (!observerElement || !hasMore) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMorePosts(); // Kích hoạt tải thêm
-        }
-      },
-      { threshold: 1.0 }
-    );
-    observer.observe(observerElement);
-    return () => observer.unobserve(observerElement);
-  }, [loadMorePosts, hasMore]);
+    const element = scrollRef.current; // Lấy ra phần tử DOM
+    if (!element) return; // Đảm bảo phần tử tồn tại
+    const handleScroll = () => {
+      const {
+        scrollTop, // Vị trí cuộn đã qua
+        clientHeight, // Chiều cao hiển thị của phần tử
+        scrollHeight, // Tổng chiều cao nội dung bên trong phần tử
+      } = element;
+
+      if (scrollTop + clientHeight >= scrollHeight - 1200) {
+        loadMorePosts();
+      }
+    };
+    element.addEventListener("scroll", handleScroll);
+    return () => element.removeEventListener("scroll", handleScroll);
+  }, [loadMorePosts]); // Chỉ chạy lại khi loadMorePosts thay đổi
   return (
-    <div className="pb-24">
+    <div className="pb-24" ref={scrollRef}>
       <New_post />
       {posts.map((post) => (
         <div key={post.id} className="bg-white shadow mt-1">
@@ -158,28 +246,26 @@ const News_index = () => {
               />
             )}
           </div>
-          <div className="flex justify-around py-2 border-t border-[#0003] text-gray-600 text-sm">
-            <button className="flex items-center gap-1 hover:text-blue-600">
+          <div className="flex justify-around h-10 border-t border-[#0003] text-[#999] text-sm">
+            <button className="flex items-center flex-1 justify-center gap-1 hover:text-[#07f]">
               <AiOutlineLike />
             </button>
-            <button className="flex items-center gap-1 hover:text-blue-600">
+            <button className="flex items-center flex-1 justify-center gap-1 hover:text-[#07f]">
               <BiCommentDetail />
             </button>
-            <button className="flex items-center gap-1 hover:text-blue-600">
+            <button className="flex items-center flex-1 justify-center gap-1 hover:text-[#07f]">
               <RiShareForwardFill />
             </button>
           </div>
         </div>
       ))}
-      <div
-        id="observer-target"
-        className="flex flex-col gap-1 p-6 items-center justify-center text-[#999] text-sm"
-      >
-        {loading && <Spin />}
-        {!hasMore && !loading && <p>Đã hết nội dung.</p>}
-        {hasMore && loading && <p>Đang tải thêm...</p>}
-        {hasMore && !loading && <p>Cuộn xuống để xem thêm...</p>}
-      </div>
+      {loading && (
+        <div className="flex absolute w-screen top-8 items-center justify-center fadeInBot">
+          <div className="flex p-4 rounded-full bg-white">
+            <Spin />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

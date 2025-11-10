@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 // Định nghĩa kiểu dữ liệu cho một ngày trong lịch
 interface DayInfo {
@@ -85,18 +86,18 @@ const CongIndex: React.FC = () => {
       <div className="flex justify-between items-center mb-3 bg-white shadow p-4 h-14">
         <button
           onClick={() => handleMonthChange(-1)}
-          className="p-2 text-blue-600 hover:bg-gray-100 rounded-full"
+          className="p-3 hover:bg-gray-100 rounded-full"
         >
-          &lt;
+          <FaAngleLeft size={16} />
         </button>
         <h2 className="font-medium">
           Tháng {currentMonth + 1}, {currentYear}
         </h2>
         <button
           onClick={() => handleMonthChange(1)}
-          className="p-2 text-blue-600 hover:bg-gray-100 rounded-full"
+          className="p-3 hover:bg-gray-100 rounded-full"
         >
-          &gt;
+          <FaAngleRight size={16} />
         </button>
       </div>
       <div className="flex flex-col px-2 gap-2">
@@ -105,10 +106,10 @@ const CongIndex: React.FC = () => {
             Hôm nay bạn chưa chấm công!!!
           </div>
           <div className="flex items-center text-[13px]">
-            <div className="flex flex-1 justify-center text-[#999]">Để sau</div>
-            <div className="text-[#07f] flex-1 border-l border-[#0002] justify-center flex w-full p-2">
+            <div className="text-[#07f] flex-1 border-r border-[#0002] justify-center flex w-full p-2">
               Chấm công ngay
             </div>
+            <div className="flex flex-1 justify-center text-[#999]">Để sau</div>
           </div>
         </div>
         <div className="flex flex-col bg-white shadow rounded-xl overflow-hidden">

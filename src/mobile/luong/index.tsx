@@ -1,14 +1,13 @@
 import React from "react";
 import { FaCircleCheck } from "react-icons/fa6";
-
 const Luong_index = () => {
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex">
-        <div className="text-[20px] text-center flex-1 bg-white p-2 border-b-2 text-[#07f]">
-          Lương
+      <div className="flex h-14 bg-white">
+        <div className="flex text-[16px] items-center flex-1 p-2 border-b-2 text-[#07f]">
+          Tạm tính
         </div>
-        <div className="text-[20px] text-center flex-1 bg-white p-2 text-[#999]">
+        <div className="flex text-[16px] items-center flex-1 p-2 text-[#999]">
           Bảng lương
         </div>
       </div>

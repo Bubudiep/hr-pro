@@ -14,32 +14,32 @@ export interface UserProfile {
   email: string;
   avatar: string; // Thêm một số trường dữ liệu thực tế
 }
-// 2. Định nghĩa "hình dạng" của Context
+export interface AppConfig {
+  taskbar?: boolean;
+}
+const DEFAULT_CONFIG: AppConfig = {
+  taskbar: true,
+};
 interface UserContextType {
+  config: AppConfig;
   profile: UserProfile | null; // Dữ liệu chi tiết của user
   isLoading: boolean; // Trạng thái đang tải
-  fetchUserProfile: (userId: string) => Promise<void>; // Hàm để tải dữ liệu
-  clearUserProfile: () => void; // Hàm để xóa dữ liệu khi logout
+  fetchUserProfile?: (userId: string) => Promise<void>; // Hàm để tải dữ liệu
+  clearUserProfile?: () => void; // Hàm để xóa dữ liệu khi logout
+  updateConfig: (newConfig: Partial<AppConfig>) => void;
 }
-// 3. Tạo Context
 const UserContext = createContext<UserContextType | undefined>(undefined);
-// 4. Tạo Provider
 interface UserProviderProps {
   children: ReactNode;
 }
-
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { user: authUser, logout: authLogout } = useAuth();
+  const [appConfig, setAppConfig] = useState<AppConfig>(DEFAULT_CONFIG);
   const fetchUserProfile = async (userId: string) => {
     setIsLoading(true);
     try {
-      // Giả lập gọi API
-      // const response = await axios.get(`/api/users/${userId}`);
-      // setProfile(response.data);
-
-      // --- Giả lập dữ liệu ---
       await new Promise((resolve) => setTimeout(resolve, 500)); // Giả lập chờ mạng
       const mockProfile: UserProfile = {
         id: 1,
@@ -48,7 +48,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         avatar: "https://i.pravatar.cc/150",
       };
       setProfile(mockProfile);
-      // ------------------------
     } catch (error) {
       console.error("Lỗi khi tải thông tin user:", error);
       setProfile(null);
@@ -56,32 +55,32 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       setIsLoading(false);
     }
   };
-
-  // Hàm xóa dữ liệu khi logout
   const clearUserProfile = () => {
     setProfile(null);
   };
-
-  // Tự động tải thông tin user khi 'authUser' thay đổi (tức là khi login)
   useEffect(() => {
     if (authUser) {
-      fetchUserProfile(authUser); // authUser là 'username' từ AuthContext
+      fetchUserProfile(authUser);
     } else {
-      clearUserProfile(); // Xóa profile khi user là null (logout)
+      clearUserProfile();
     }
-  }, [authUser]); // Chạy lại khi authUser thay đổi
-
+  }, [authUser]);
+  const updateConfig = (newConfig: Partial<AppConfig>) => {
+    setAppConfig((prevConfig) => ({
+      ...prevConfig, // Giữ nguyên các giá trị config cũ
+      ...newConfig, // Ghi đè bằng các giá trị mới được truyền vào
+    }));
+  };
   const value = {
     profile,
     isLoading,
     fetchUserProfile,
     clearUserProfile,
+    config: appConfig,
+    updateConfig,
   };
-
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
-
-// 5. Tạo Custom Hook
 export const useUser = () => {
   const context = useContext(UserContext);
   if (context === undefined) {

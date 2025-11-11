@@ -11,11 +11,13 @@ const BottomTaskbar = ({
   setActiveTab,
 }: {
   activeTab: string;
-  setActiveTab: Dispatch<SetStateAction<string>>;
+  setActiveTab: (e: string) => void;
 }) => {
   const { config } = useUser();
   return (
-    <nav className={`taskbar ${config?.taskbar ? "" : "-bottom-20!"}`}>
+    <nav
+      className={`taskbar select-none ${config?.taskbar ? "" : "-bottom-20!"}`}
+    >
       <div
         className="flex px-2 h-16 w-[calc(100%-16px)] mb-2 rounded-[18px] justify-around 
         bg-white shadow border border-[#0001]"

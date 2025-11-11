@@ -5,9 +5,21 @@ import BottomTaskbar from "./taskbar";
 import Lichtuyen_index from "./lichtuyen";
 import Cong_index from "./cong";
 import Canhan_index from "./canhan";
+import { useNavigate, useParams } from "react-router-dom";
 const tabOrder = ["cong", "luong", "news", "lichtuyen", "canhan"];
 const Mobile_index = () => {
-  const [activeTab, setActiveTab] = useState("news");
+  const { tab } = useParams();
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState(tab || "news");
+  useEffect(() => {
+    if (tab && activeTab !== tab) {
+      setActiveTab(tab);
+    }
+  }, [tab]);
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+    navigate(`/mobile/${newTab}`);
+  };
   const activeTabIndex = tabOrder.indexOf(activeTab);
   return (
     <>
@@ -25,7 +37,7 @@ const Mobile_index = () => {
           <Lichtuyen_index />
           <Canhan_index />
         </div>
-        <BottomTaskbar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <BottomTaskbar activeTab={activeTab} setActiveTab={handleTabChange} />
       </div>
     </>
   );

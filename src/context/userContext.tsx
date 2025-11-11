@@ -12,7 +12,10 @@ export interface UserProfile {
   id: number;
   name: string;
   email: string;
-  avatar: string; // Thêm một số trường dữ liệu thực tế
+  avatar: string;
+  tag: string;
+  account_type: string;
+  timviec: boolean;
 }
 export interface AppConfig {
   taskbar?: boolean;
@@ -24,6 +27,7 @@ interface UserContextType {
   config: AppConfig;
   profile: UserProfile | null; // Dữ liệu chi tiết của user
   isLoading: boolean; // Trạng thái đang tải
+  setProfile: React.SetStateAction<any>;
   fetchUserProfile?: (userId: string) => Promise<void>; // Hàm để tải dữ liệu
   clearUserProfile?: () => void; // Hàm để xóa dữ liệu khi logout
   updateConfig: (newConfig: Partial<AppConfig>) => void;
@@ -33,7 +37,15 @@ interface UserProviderProps {
   children: ReactNode;
 }
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>({
+    id: 0,
+    name: "User name",
+    tag: "user.name",
+    email: "",
+    avatar: "",
+    timviec: false,
+    account_type: "user",
+  });
   const [isLoading, setIsLoading] = useState(false);
   const { user: authUser, logout: authLogout } = useAuth();
   const [appConfig, setAppConfig] = useState<AppConfig>(DEFAULT_CONFIG);
@@ -45,7 +57,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         id: 1,
         name: userId, // Lấy tên từ AuthContext
         email: `${userId.toLowerCase()}@example.com`,
+        tag: "user.name",
         avatar: "https://i.pravatar.cc/150",
+        account_type: "user",
+        timviec: false,
       };
       setProfile(mockProfile);
     } catch (error) {
@@ -73,6 +88,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   };
   const value = {
     profile,
+    setProfile,
     isLoading,
     fetchUserProfile,
     clearUserProfile,

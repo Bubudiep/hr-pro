@@ -198,7 +198,7 @@ const News_index = () => {
     });
   };
   return (
-    <div className="pb-24" ref={scrollRef}>
+    <div className="pb-24 relative" ref={scrollRef}>
       <New_post />
       {posts.map((post) => (
         <div key={post.id} className="bg-white shadow mt-1">

@@ -1,35 +1,61 @@
-import { FaImage, FaPlus, FaUser } from "react-icons/fa";
+import { FaImage, FaPlus, FaUser, FaUserSecret } from "react-icons/fa";
 import Baiviet_moi from "../../components/Baiviet_moi";
 import { Component, useState, type ReactNode } from "react";
 import { BiMessageSquareAdd } from "react-icons/bi";
+import { useUser } from "../../context/userContext";
+import { Button } from "antd";
 const New_post = ({ children }: { children?: ReactNode }) => {
   const [showModal, setShowModal] = useState(false);
+  const { profile, setProfile } = useUser();
   return (
     <>
       <Baiviet_moi showModal={showModal} setShowModal={setShowModal} />
-      <div className="flex flex-col mb-2" onClick={() => setShowModal(true)}>
-        {children ? (
-          children
-        ) : (
-          <div className="flex h-[54] items-center bg-white shadow p-2 gap-2">
-            <div
-              className="text-[13px] mr-2 w-full rounded-md py-1.5 p-2
-            ml-0.5 font-medium text-[#174170] flex gap-2 items-center"
-            >
-              <BiMessageSquareAdd size={20} />
-              Bài viết mới
-            </div>
-            <div className="avatar">
+      {profile?.id ? (
+        <div className="flex flex-col mb-2" onClick={() => setShowModal(true)}>
+          {children ? (
+            children
+          ) : (
+            <div className="flex h-[54] items-center bg-white shadow p-2 gap-2">
               <div
-                className="flex w-10 items-center justify-center text-white
-              h-10 bg-[#5d7896]"
+                className="text-[13px] mr-2 w-full rounded-md py-1.5 p-2
+              ml-0.5 font-medium text-[#174170] flex gap-2 items-center"
               >
-                <FaUser />
+                <BiMessageSquareAdd size={20} />
+                Bài viết mới
+              </div>
+              <div className="avatar">
+                <div
+                  className="flex w-10 items-center justify-center text-white
+              h-10 bg-[#5d7896]"
+                >
+                  <FaUser />
+                </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        <div className="flex flex-col sticky top-0 z-100 mb-2">
+          {children ? (
+            children
+          ) : (
+            <div className="flex h-[54] items-center bg-white shadow p-2 gap-2">
+              <div
+                className="text-[13px] mr-2 w-full rounded-md py-1.5 p-2
+              ml-0.5 font-medium text-[#174170] flex gap-2 items-center"
+              >
+                Chưa đăng nhập?
+              </div>
+              <div className="avatar">
+                <div className="flex items-center justify-center h-10 gap-2">
+                  <Button>Đăng ký</Button>
+                  <Button type="primary">Đăng nhập</Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 };

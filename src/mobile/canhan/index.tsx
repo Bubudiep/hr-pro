@@ -2,6 +2,7 @@ import { Button, Modal } from "antd";
 import React, { useState } from "react";
 import { FaCheckCircle, FaPlus } from "react-icons/fa";
 import { FaCircleCheck, FaCircleXmark } from "react-icons/fa6";
+import { MdWorkHistory } from "react-icons/md";
 import { RiMapPin5Line } from "react-icons/ri";
 
 const Canhan_index = () => {
@@ -24,6 +25,19 @@ const Canhan_index = () => {
             <div className="text-[10px] bg-[#235fa3] text-white px-2 py-0.5 rounded">
               Đang tìm việc
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex text-[12px] gap-2 items-center bg-white shadow p-2 select-none">
+        <div className="flex min-w-10 w-10 h-10 items-center bg-[#2e3236] justify-center">
+          <MdWorkHistory size={20} color="#fff" />
+        </div>
+        <div className="flex flex-col w-full relative">
+          <div className="flex justify-between">
+            <div className="text-[14px] font-medium">Người đi tìm việc</div>
+          </div>
+          <div className="text-[12px]">
+            Tài khoản của bạn đang là người tìm việc
           </div>
         </div>
       </div>

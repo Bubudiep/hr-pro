@@ -2,7 +2,11 @@ import { Spin, Tooltip } from "antd";
 import { FaShare, FaTrash } from "react-icons/fa";
 import { FiMoreHorizontal } from "react-icons/fi";
 import BlurImage from "../../components/BlurImage";
-import { BiCommentDetail, BiSolidTag } from "react-icons/bi";
+import {
+  BiCommentDetail,
+  BiSolidTag,
+  BiSolidUpArrowCircle,
+} from "react-icons/bi";
 import { AiOutlineLike } from "react-icons/ai";
 import { RiShareForwardFill } from "react-icons/ri";
 import New_post from "./new_post";
@@ -136,6 +140,7 @@ const News_index = () => {
     },
   ]);
   const fetchNewPosts = (startId = 0, limit = 6) => {
+    console.log("Đang tải:", startId, limit);
     const newPosts = [];
     for (let i = 0; i < limit; i++) {
       const id = startId + i;
@@ -159,16 +164,15 @@ const News_index = () => {
   };
   const loadMorePosts = useCallback(() => {
     if (loading || !hasMore) return;
+    setHasMore(true);
     setLoading(true);
-    setTimeout(() => {
-      const nextId = posts.length + 1;
-      const newPosts = fetchNewPosts(nextId, 6);
-      setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-      setLoading(false);
-      if (posts.length + newPosts.length >= 500) {
-        setHasMore(false);
-      }
-    }, 1000);
+    const nextId = posts.length + 1;
+    const newPosts = fetchNewPosts(nextId, 10);
+    setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+    setLoading(false);
+    if (posts.length + newPosts.length >= 200) {
+      setHasMore(false);
+    }
   }, [loading, hasMore, posts.length]);
   useEffect(() => {
     const element = scrollRef.current; // Lấy ra phần tử DOM
@@ -186,7 +190,13 @@ const News_index = () => {
     };
     element.addEventListener("scroll", handleScroll);
     return () => element.removeEventListener("scroll", handleScroll);
-  }, [loadMorePosts]); // Chỉ chạy lại khi loadMorePosts thay đổi
+  }, [loadMorePosts]);
+  const handleScrollToTop = () => {
+    scrollRef?.current?.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
   return (
     <div className="pb-24" ref={scrollRef}>
       <New_post />
@@ -263,6 +273,17 @@ const News_index = () => {
         <div className="flex absolute w-screen top-8 items-center justify-center fadeInBot">
           <div className="flex p-4 rounded-full bg-white">
             <Spin />
+          </div>
+        </div>
+      )}
+      {!hasMore && (
+        <div className="flex gap-2 top-8 text-[#999] p-8 items-center justify-center">
+          <div
+            className="flex gap-3 bg-white p-2 items-center px-4 rounded-md shadow"
+            onClick={handleScrollToTop}
+          >
+            <BiSolidUpArrowCircle size={18} />
+            Về đầu trang!
           </div>
         </div>
       )}

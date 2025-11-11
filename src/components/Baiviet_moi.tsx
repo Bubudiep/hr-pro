@@ -67,7 +67,7 @@ const Baiviet_moi = ({
     setSelectedFiles((prev) => prev.filter((file) => file.id !== id));
   };
   return showModal ? (
-    <div className="flex flex-col fixed w-screen h-screen z-99">
+    <div className="flex flex-col top-0 left-0 fixed w-screen h-screen z-99">
       <div className="flex relative flex-col bg-white w-full h-full z-1 mt-auto">
         <div
           className="text-[13px] pl-4.5 w-full 

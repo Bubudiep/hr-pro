@@ -8,7 +8,7 @@ const ChuaDangnhap = ({ children }: { children?: ReactNode }) => {
   return children ? (
     children
   ) : (
-    <div className="w-screen flex flex-col items-center p-8 fadeInTop min-h-screen">
+    <div className="w-screen flex flex-col items-center p-8 px-6 fadeInTop min-h-screen">
       <div className="flex p-6 bg-[white] w-full rounded-xl shadow">
         <div className="w-10 h-10 min-w-10">
           <TbAlertSquareRoundedFilled size={26} />

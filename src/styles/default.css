@@ -55,7 +55,7 @@ button {
 }
 .ant-modal {
   margin: 8px auto !important;
-  max-width: calc(100vw - 32px) !important;
+  max-width: calc(100vw - 48px) !important;
   .ant-modal-content {
     padding: 0px !important;
     overflow: hidden;

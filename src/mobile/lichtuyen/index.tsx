@@ -8,6 +8,12 @@ import { BiSolidBell } from "react-icons/bi";
 import { BsBookmarkHeartFill } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
 import { MdOutlineAttachMoney } from "react-icons/md";
+import Spark from "../../components/Spark";
+import { Tooltip } from "antd";
+import {
+  TbAlertSquareRounded,
+  TbAlertSquareRoundedFilled,
+} from "react-icons/tb";
 
 const Lichtuyen_index = () => {
   const settings = {
@@ -62,141 +68,59 @@ const Lichtuyen_index = () => {
           <BsBookmarkHeartFill size={16} />
           Phù hợp với bạn
         </div>
-        <div className="flex flex-col gap-2 mt-2">
-          <div className="flex flex-col bg-[white] shadow rounded-xl p-3 gap-3 relative">
-            <div className="absolute shadow px-2 -right-0.5 -top-0.5 bg-[red] text-white font-medium">
-              Thưởng 1Tr
-            </div>
-            <div className="absolute right-0 -z-1 rotate-45 top-0 bg-[#444444] w-5 h-5" />
+        <div className="lichtuyen flex mt-2">
+          <div className="item">
+            <Tooltip
+              title={
+                <div className="flex flex-col text-black p-1 min-w-[200px]">
+                  <div className="flex flex-col text-[13px] text-[#22242c]">
+                    <div className="flex gap-1 font-medium items-center">
+                      <TbAlertSquareRoundedFilled />
+                      Điều kiện:
+                    </div>
+                    <div className="flex flex-col bg-[#eee] rounded p-1 px-2 mt-1">
+                      <div className="flex">- Là công nhân mới</div>
+                      <div className="flex">- Làm đủ 10 ngày công</div>
+                    </div>
+                  </div>
+                  <div className="btn justify-center ungtuyen relative! mt-2 h-8 py-0! px-2!">
+                    Ứng tuyển ngay!
+                  </div>
+                </div>
+              }
+              color="white"
+              trigger="click"
+              placement="topLeft"
+            >
+              <div className="hot-card">
+                <TbAlertSquareRoundedFilled />
+                Thưởng 1Tr
+              </div>
+            </Tooltip>
             <div className="flex gap-2">
-              <div className="min-w-12 w-12 h-12 overflow-hidden">
+              <div className="avatar">
                 <img src="https://media.licdn.com/dms/image/v2/D4D0BAQGMYqiU1GnehQ/company-logo_200_200/B4DZY4vvROGwAM-/0/1744708761120/compal_logo?e=2147483647&v=beta&t=YSUJcJQd8Foa9X1zr-KqRje8LMrbsKLXugkfvBeoJ-g" />
               </div>
-              <div className="flex flex-col gap-0.5">
-                <div className="text-[16px] font-medium mt-1">Bảo an</div>
-                <div className="flex gap-1 mt-1">
-                  <div className="text-[11px] px-1 pt-0.5 rounded-sm text-[white] bg-[#55596d]">
-                    40 - 52 tuổi
-                  </div>
-                  <div className="text-[11px] px-1 pt-0.5 rounded-sm text-[white] bg-[#55596d]">
-                    Phòng sạch
-                  </div>
-                  <div className="text-[11px] px-1 pt-0.5 rounded-sm text-[white] bg-[#55596d]">
-                    Cửa từ
-                  </div>
+              <div className="information">
+                <div className="title">Bảo an</div>
+                <div className="details">
+                  <div className="dt-item">40 - 52 tuổi</div>
+                  <div className="dt-item">Phòng sạch</div>
+                  <div className="dt-item">Cửa từ</div>
                 </div>
-                <div className="text-[13px] font-medium text-[#07f] mt-1">
-                  Compal
-                </div>
-                <div className="flex items-center gap-1 text-[12px] text-[#999] leading-3 mt-px">
+                <div className="name">Compal</div>
+                <div className="address">
                   <FaLocationDot size={10} className="mb-px" />
                   Bá Thiện I - Bình Xuyên - Phú Thọ
                 </div>
               </div>
             </div>
-            <div className="flex relative bg-[#e5ebf7] gap-2 items-center text-[#093180] font-medium rounded-lg px-2 py-1">
-              <div className="bg-[#093180] text-white w-6 h-6 flex items-center justify-center rounded-full">
+            <div className="salary">
+              <div className="icon">
                 <MdOutlineAttachMoney size={15} />
               </div>
               8-12 Triệu
-              <div
-                className="absolute right-0 bg-[#07f] border border-white p-2 rounded-lg text-[white] 
-                font-medium px-4 shadow"
-              >
-                Ứng tuyển
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col bg-[white] shadow rounded-xl p-3 gap-3 relative">
-            <div className="absolute shadow px-2 -right-0.5 -top-0.5 bg-[red] text-white font-medium">
-              Thưởng 700K
-            </div>
-            <div className="absolute right-0 -z-1 rotate-45 top-0 bg-[#444444] w-5 h-5" />
-            <div className="flex gap-2">
-              <div className="min-w-12 w-12 h-12 overflow-hidden">
-                <img src="https://media.licdn.com/dms/image/v2/D4D0BAQGMYqiU1GnehQ/company-logo_200_200/B4DZY4vvROGwAM-/0/1744708761120/compal_logo?e=2147483647&v=beta&t=YSUJcJQd8Foa9X1zr-KqRje8LMrbsKLXugkfvBeoJ-g" />
-              </div>
-              <div className="flex flex-col gap-0.5">
-                <div className="text-[16px] font-medium mt-1">
-                  Công nhân láp ráp sản phẩm (tai nghe)
-                </div>
-                <div className="flex gap-1 mt-1">
-                  <div className="text-[11px] px-1 pt-0.5 rounded-sm text-[white] bg-[#55596d]">
-                    18 - 23 tuổi
-                  </div>
-                  <div className="text-[11px] px-1 pt-0.5 rounded-sm text-[white] bg-[#55596d]">
-                    Phòng sạch
-                  </div>
-                  <div className="text-[11px] px-1 pt-0.5 rounded-sm text-[white] bg-[#55596d]">
-                    Cửa từ
-                  </div>
-                </div>
-                <div className="text-[13px] font-medium text-[#07f] mt-1">
-                  Compal
-                </div>
-                <div className="flex items-center gap-1 text-[12px] text-[#999] leading-3 mt-px">
-                  <FaLocationDot size={10} className="mb-px" />
-                  Bá Thiện I - Bình Xuyên - Phú Thọ
-                </div>
-              </div>
-            </div>
-            <div className="flex relative bg-[#e5ebf7] gap-2 items-center text-[#093180] font-medium rounded-lg px-2 py-1">
-              <div className="bg-[#093180] text-white w-6 h-6 flex items-center justify-center rounded-full">
-                <MdOutlineAttachMoney size={15} />
-              </div>
-              9-15 Triệu
-              <div
-                className="absolute right-0 bg-[#07f] border border-white p-2 rounded-lg text-[white] 
-                font-medium px-4 shadow"
-              >
-                Ứng tuyển
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col bg-[white] shadow rounded-xl p-3 gap-3 relative">
-            <div className="absolute shadow px-2 -right-0.5 -top-0.5 bg-[red] text-white font-medium">
-              Thưởng 700K
-            </div>
-            <div className="absolute right-0 -z-1 rotate-45 top-0 bg-[#444444] w-5 h-5" />
-            <div className="flex gap-2">
-              <div className="min-w-12 w-12 h-12 overflow-hidden">
-                <img src="https://media.licdn.com/dms/image/v2/D4D0BAQGMYqiU1GnehQ/company-logo_200_200/B4DZY4vvROGwAM-/0/1744708761120/compal_logo?e=2147483647&v=beta&t=YSUJcJQd8Foa9X1zr-KqRje8LMrbsKLXugkfvBeoJ-g" />
-              </div>
-              <div className="flex flex-col gap-0.5">
-                <div className="text-[16px] font-medium mt-1">
-                  Công nhân láp ráp sản phẩm (tai nghe)
-                </div>
-                <div className="flex gap-1 mt-1">
-                  <div className="text-[11px] px-1 pt-0.5 rounded-sm text-[white] bg-[#55596d]">
-                    18 - 23 tuổi
-                  </div>
-                  <div className="text-[11px] px-1 pt-0.5 rounded-sm text-[white] bg-[#55596d]">
-                    Phòng sạch
-                  </div>
-                  <div className="text-[11px] px-1 pt-0.5 rounded-sm text-[white] bg-[#55596d]">
-                    Cửa từ
-                  </div>
-                </div>
-                <div className="text-[13px] font-medium text-[#07f] mt-1">
-                  Compal
-                </div>
-                <div className="flex items-center gap-1 text-[12px] text-[#999] leading-3 mt-px">
-                  <FaLocationDot size={10} className="mb-px" />
-                  Bá Thiện I - Bình Xuyên - Phú Thọ
-                </div>
-              </div>
-            </div>
-            <div className="flex relative bg-[#e5ebf7] gap-2 items-center text-[#093180] font-medium rounded-lg px-2 py-1">
-              <div className="bg-[#093180] text-white w-6 h-6 flex items-center justify-center rounded-full">
-                <MdOutlineAttachMoney size={15} />
-              </div>
-              8-12 Triệu
-              <div
-                className="absolute right-0 bg-[#07f] border border-white p-2 rounded-lg text-[white] 
-                font-medium px-4 shadow"
-              >
-                Ứng tuyển
-              </div>
+              <div className="btn ungtuyen">Ứng tuyển</div>
             </div>
           </div>
         </div>

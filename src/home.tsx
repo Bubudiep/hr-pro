@@ -1,6 +1,7 @@
 import { Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "./context/authContext";
 
 const isMobileDevice = (): boolean => {
   return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, type Dispatch } from "react";
-import { useUser } from "../context/userContext";
 import { FaCircleCheck, FaXmark } from "react-icons/fa6";
 import {
   BiImageAdd,
@@ -27,15 +26,11 @@ const Baiviet_moi = ({
   showModal: boolean;
   setShowModal: Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { updateConfig } = useUser();
   const [checkbox, setCheckbox] = useState({
     tuyendung: false,
     quangba: false,
   });
   const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
-  useEffect(() => {
-    updateConfig({ taskbar: !showModal });
-  }, [showModal]);
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;

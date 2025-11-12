@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import { useUser } from "../../context/userContext";
 import { TbAlertSquareRoundedFilled } from "react-icons/tb";
 import { Button } from "antd";
+import ChuaDangnhap from "../../components/auth/ChuaDangnhap";
+import { useAuth } from "../../context/authContext";
 
 // Định nghĩa kiểu dữ liệu cho một ngày trong lịch
 interface DayInfo {
@@ -83,8 +84,8 @@ const CongIndex: React.FC = () => {
       return newDate;
     });
   };
-  const { profile, setProfile } = useUser();
-  return profile?.id ? (
+  const { user } = useAuth();
+  return user?.profile?.id ? (
     <div className="flex flex-col gap-1">
       <div className="flex justify-between items-center mb-3 bg-white shadow p-4 h-14">
         <button
@@ -150,24 +151,7 @@ const CongIndex: React.FC = () => {
       </div>
     </div>
   ) : (
-    <div className="w-screen flex flex-col items-center p-8 fadeInTop min-h-screen">
-      <div className="flex p-6 bg-[white] w-full rounded-xl shadow">
-        <div className="w-10 h-10 min-w-10">
-          <TbAlertSquareRoundedFilled size={26} />
-        </div>
-        <div className="flex flex-col">
-          <div className="flex text-[17px] font-medium">Yêu cầu đăng nhập</div>
-          <div className="mt-2">
-            Chức năng chỉ dành cho thành viên, vui lòng đăng nhập mới được sử
-            dụng!
-          </div>
-          <div className="flex justify-end gap-2 mt-4">
-            <Button>Đăng ký</Button>
-            <Button type="primary">Đăng nhập</Button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <ChuaDangnhap />
   );
 };
 

@@ -2,15 +2,17 @@ import { FaImage, FaPlus, FaUser, FaUserSecret } from "react-icons/fa";
 import Baiviet_moi from "../../components/Baiviet_moi";
 import { Component, useState, type ReactNode } from "react";
 import { BiMessageSquareAdd } from "react-icons/bi";
-import { useUser } from "../../context/userContext";
 import { Button } from "antd";
+import Dangky from "../../components/auth/Dangky";
+import Dangnhap from "../../components/auth/Dangnhap";
+import { useAuth } from "../../context/authContext";
 const New_post = ({ children }: { children?: ReactNode }) => {
   const [showModal, setShowModal] = useState(false);
-  const { profile, setProfile } = useUser();
+  const { user } = useAuth();
   return (
     <>
       <Baiviet_moi showModal={showModal} setShowModal={setShowModal} />
-      {profile?.id ? (
+      {user?.profile?.id ? (
         <div className="flex flex-col mb-2" onClick={() => setShowModal(true)}>
           {children ? (
             children
@@ -48,8 +50,12 @@ const New_post = ({ children }: { children?: ReactNode }) => {
               </div>
               <div className="avatar">
                 <div className="flex items-center justify-center h-10 gap-2">
-                  <Button>Đăng ký</Button>
-                  <Button type="primary">Đăng nhập</Button>
+                  <Dangky>
+                    <Button>Đăng ký</Button>
+                  </Dangky>
+                  <Dangnhap>
+                    <Button type="primary">Đăng nhập</Button>
+                  </Dangnhap>
                 </div>
               </div>
             </div>

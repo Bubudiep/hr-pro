@@ -58,6 +58,41 @@ button {
   max-width: calc(100vw - 32px) !important;
   .ant-modal-content {
     padding: 0px !important;
+    overflow: hidden;
+    .ant-modal-header {
+      @apply flex p-2 px-3;
+    }
+    .ant-modal-close {
+      right: 4px;
+      top: 4px;
+    }
+    .ant-modal-body {
+      padding: 16px;
+    }
+    .ant-modal-footer {
+      @apply flex border-t border-[#0003];
+      button {
+        padding: 8px;
+        display: flex;
+        flex: 1;
+        border: none;
+        margin: 0px;
+        border: 0px;
+        border-radius: 0px;
+        background-color: transparent !important;
+        height: 42px;
+        &:last-child {
+          margin-left: 0px;
+          border-left: 1px solid #0003;
+        }
+        &.ant-btn-primary {
+          border-radius: 0px;
+          span {
+            color: #07f !important;
+          }
+        }
+      }
+    }
     .ant-modal-body {
       .ant-modal-confirm-body {
         padding: 18px 16px;
@@ -84,6 +119,16 @@ button {
           }
         }
       }
+    }
+  }
+  &.ant-modal-confirm {
+    .ant-modal-body {
+      padding: 0px !important;
+    }
+    .ant-modal-header {
+      display: none;
+      padding: 0px !important;
+      margin: 0px !important;
     }
   }
 }
@@ -136,6 +181,201 @@ button {
   opacity: 0;
   animation-delay: var(--animation-delay, 0s);
 }
+.lichtuyen {
+  @apply flex-col gap-2;
+  .item {
+    @apply flex flex-col bg-[white] shadow rounded-xl p-3 gap-3 relative;
+    .salary {
+      @apply flex relative bg-[#e5ebf7] gap-2 items-center 
+      text-[#093180] font-medium rounded-lg px-2 py-1;
+      .icon {
+        @apply bg-[#093180] text-white w-6 h-6 flex items-center justify-center rounded-full;
+      }
+    }
+    .hot-card {
+      @apply rounded-[4px] absolute px-2 -right-1 py-0.5 rounded-br-none
+      -top-1 bg-[red] text-white font-medium text-[13px] flex gap-1 items-center;
+      &::before {
+        width: 0;
+        height: 0;
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        right: 13px;
+        border-style: solid;
+        border-width: 0 8px 8px 0;
+        border-color: transparent red transparent transparent;
+        transform: translate(100%, -100%);
+        @apply rotate-45;
+        z-index: -1;
+      }
+    }
+    .avatar {
+      @apply min-w-12 w-12 h-12 overflow-hidden;
+    }
+    .information {
+      @apply flex flex-col gap-0.5;
+      .title {
+        @apply text-[16px] font-medium mt-1;
+      }
+      .details {
+        @apply flex gap-1 mt-1;
+        .dt-item {
+          @apply text-[11px] px-1 pt-0.5 rounded-sm text-[white] bg-[#55596d];
+        }
+      }
+      .name {
+        @apply text-[13px] font-medium text-[#07f] mt-1;
+      }
+      .address {
+        @apply flex items-center gap-1 text-[12px] text-[#999] leading-3 mt-px;
+      }
+    }
+  }
+}
+.btn {
+  @apply transition-all duration-300 select-none;
+  &.ungtuyen {
+    @apply absolute right-0 bg-[#07f] border 
+    border-white p-2 rounded-lg text-[white] 
+    font-medium px-4 shadow flex items-center;
+    &:active {
+      @apply bg-[#00489b];
+    }
+  }
+}
+.spark-nav {
+  &.active {
+    animation: bounce2 0.3s ease-in-out forwards;
+    .spark {
+      animation: shootSparkOut 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+        forwards;
+    }
+  }
+  &.deactive {
+    animation: bounce1 0.3s ease-in-out forwards;
+  }
+  .spark {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #2dabff;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    z-index: -1;
+    &.spark-1 {
+      --tx: 20px;
+      --ty: -20px;
+      animation-delay: 0.05s; /* Bắt đầu animation trễ hơn một chút */
+    }
+    &.spark-2 {
+      --tx: 30px;
+      --ty: 0px;
+      animation-delay: 0.1s;
+    }
+    &.spark-3 {
+      --tx: -20px;
+      --ty: 20px;
+      animation-delay: 0s;
+    }
+    &.spark-4 {
+      --tx: -20px;
+      --ty: 0px;
+      animation-delay: 0.15s;
+    }
+  }
+}
+/* From Uiverse.io by SchawnnahJ */
+.loader {
+  position: relative;
+  width: 2.5em;
+  height: 2.5em;
+  transform: rotate(165deg);
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 0.25em;
+    transform: translate(-50%, -50%);
+  }
+  &::before {
+    animation: before8 2s infinite;
+  }
+  &::after {
+    animation: after6 2s infinite;
+  }
+}
+@keyframes before8 {
+  0% {
+    width: 0.5em;
+    box-shadow: 1em -0.5em #00a2ff, -1em 0.5em #00d5ff;
+  }
+
+  35% {
+    width: 2.5em;
+    box-shadow: 0 -0.5em #00a2ff, 0 0.5em #00d5ff;
+  }
+
+  70% {
+    width: 0.5em;
+    box-shadow: -1em -0.5em #00a2ff, 1em 0.5em #00d5ff;
+  }
+
+  100% {
+    box-shadow: 1em -0.5em #00a2ff, -1em 0.5em #00d5ff;
+  }
+}
+
+@keyframes after6 {
+  0% {
+    height: 0.5em;
+    box-shadow: 0.5em 1em #0056c7, -0.5em -1em #ceffff;
+  }
+
+  35% {
+    height: 2.5em;
+    box-shadow: 0.5em 0 #0056c7, -0.5em 0 #ceffff;
+  }
+
+  70% {
+    height: 0.5em;
+    box-shadow: 0.5em -1em #0056c7, -0.5em 1em #ceffff;
+  }
+
+  100% {
+    box-shadow: 0.5em 1em #0056c7, -0.5em -1em #ceffff;
+  }
+}
+.fadeOut {
+  animation: fadeOut 0.6s ease-in-out;
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes shootSparkOut {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-100% + var(--tx)), calc(-100% + var(--ty)))
+      scale(0);
+    opacity: 0;
+  }
+}
 @keyframes fadeInBot {
   from {
     opacity: 0;
@@ -144,5 +384,43 @@ button {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+@keyframes bounce1 {
+  0% {
+    transform: scale(1);
+  }
+  33% {
+    transform: scale(0.8);
+  }
+  66% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes bounce2 {
+  0% {
+    transform: scale(1);
+  }
+  33% {
+    transform: scale(1.3);
+  }
+  66% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes shootSpark {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(0);
+    opacity: 0;
   }
 }

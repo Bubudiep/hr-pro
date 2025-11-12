@@ -4,7 +4,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { LuCalendarCheck2, LuCalendarRange } from "react-icons/lu";
 import { BsUiChecks } from "react-icons/bs";
 import { DiCodeigniter } from "react-icons/di";
-import { useUser } from "../context/userContext";
+import { useAuth } from "../context/authContext";
 
 const BottomTaskbar = ({
   activeTab,
@@ -13,7 +13,7 @@ const BottomTaskbar = ({
   activeTab: string;
   setActiveTab: (e: string) => void;
 }) => {
-  const { config } = useUser();
+  const { config } = useAuth();
   return (
     <nav
       className={`taskbar select-none ${config?.taskbar ? "" : "-bottom-20!"}`}

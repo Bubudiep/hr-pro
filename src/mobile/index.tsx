@@ -6,16 +6,36 @@ import Lichtuyen_index from "./lichtuyen";
 import Cong_index from "./cong";
 import Canhan_index from "./canhan";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../context/authContext";
+import { Spin } from "antd";
 const tabOrder = ["cong", "luong", "news", "lichtuyen", "canhan"];
 const Mobile_index = () => {
   const { tab } = useParams();
   const navigate = useNavigate();
+  const { auto_login, loading } = useAuth();
+  const [showLoad, setShowload] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState(tab || "news");
   useEffect(() => {
     if (tab && activeTab !== tab) {
       setActiveTab(tab);
     }
   }, [tab]);
+  useEffect(() => {
+    if (loading) {
+      setShowload(true);
+    } else {
+      setTimeout(() => {
+        setShowload(false);
+      }, 500);
+    }
+  }, [loading]);
+  useEffect(() => {
+    auto_login((e: boolean) => {
+      if (e === false) {
+        console.log("Tự động đăng nhập không thành công!");
+      }
+    });
+  }, []);
   const handleTabChange = (newTab: string) => {
     setActiveTab(newTab);
     navigate(`/mobile/${newTab}`);
@@ -23,6 +43,14 @@ const Mobile_index = () => {
   const activeTabIndex = tabOrder.indexOf(activeTab);
   return (
     <>
+      {showLoad && (
+        <div
+          className={`flex flex-col gap-1 fixed w-screen h-screen bg-[white] 
+          z-101 items-center justify-center ${!loading ? "fadeOut" : ""}`}
+        >
+          <div className="loader" />
+        </div>
+      )}
       <div className="tab-slider-container">
         <div
           className="tab-content-wrapper"

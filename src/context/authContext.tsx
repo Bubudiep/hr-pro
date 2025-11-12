@@ -70,17 +70,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [config, setConfig] = useState({ taskbar: true });
   const auto_login = (callback?: (e: boolean) => void) => {
     const access_token: string = localStorage.getItem("access_token") || "";
-    setLoading(true);
-    Api.get("/user/", access_token)
-      .then((res) => {
-        setUser({ ...res, access_token: access_token });
-        if (callback) callback(true);
-        setLoading(false);
-        return;
-      })
-      .catch((e) => {})
-      .finally(() => setLoading(false));
-    return;
+    if (access_token) {
+      setLoading(true);
+      Api.get("/user/", access_token)
+        .then((res) => {
+          setUser({ ...res, access_token: access_token });
+          if (callback) callback(true);
+        })
+        .catch((e) => {
+          console.log(e);
+        })
+        .finally(() => setLoading(false));
+    }
   };
   const login = (
     username: string,
@@ -105,10 +106,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             message.error(e?.response?.data?.detail || "Lỗi không xác định!!");
             if (callback) callback(false);
           })
-          .finally(() => setLoading(false));
+          .finally(() => {
+            setLoading(false);
+          });
       })
       .catch((e) => {
         message.error(e?.response?.data?.detail || "Lỗi không xác định!!");
+        setLoading(false);
         if (callback) callback(false);
       });
   };

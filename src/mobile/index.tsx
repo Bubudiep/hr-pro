@@ -21,6 +21,7 @@ const Mobile_index = () => {
     }
   }, [tab]);
   useEffect(() => {
+    console.log(loading);
     if (loading) {
       setShowload(true);
     } else {

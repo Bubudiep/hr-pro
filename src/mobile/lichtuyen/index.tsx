@@ -29,7 +29,7 @@ const Lichtuyen_index = () => {
 
   return (
     <div className="flex flex-col max-w-screen overflow-y-auto pb-44">
-      <div className="min-h-14 bg-white shadow pl-2 flex items-center">
+      <div className="min-h-14 sticky top-0 z-10 bg-white shadow pl-2 flex items-center">
         <label className="flex gap-1 w-full">
           <div className="text-gray-600 p-2">
             <LuSearch />
@@ -64,6 +64,14 @@ const Lichtuyen_index = () => {
         </Slider>
       </div>
       <div className="flex flex-col px-4">
+        <div className="filter flex gap-2 overflow-x-auto mb-2 snap-x px-0">
+          <div className="item active">Tất cả</div>
+          <div className="item">Bá Thiện I</div>
+          <div className="item">Bá Thiện II</div>
+          <div className="item">Bình Xuyên I</div>
+          <div className="item">Bình Xuyên II</div>
+          <div className="item">Thăng Long 3</div>
+        </div>
         <div className="font-medium flex items-center gap-1">
           <BsBookmarkHeartFill size={16} />
           Phù hợp với bạn
@@ -103,17 +111,17 @@ const Lichtuyen_index = () => {
               </div>
               <div className="information">
                 <div className="title">Bảo an</div>
-                <div className="details">
-                  <div className="dt-item">40 - 52 tuổi</div>
-                  <div className="dt-item">Phòng sạch</div>
-                  <div className="dt-item">Cửa từ</div>
-                </div>
                 <div className="name">Compal</div>
                 <div className="address">
                   <FaLocationDot size={10} className="mb-px" />
                   Bá Thiện I - Bình Xuyên - Phú Thọ
                 </div>
               </div>
+            </div>
+            <div className="details">
+              <div className="dt-item">40 - 52 tuổi</div>
+              <div className="dt-item">Phòng sạch</div>
+              <div className="dt-item">Cửa từ</div>
             </div>
             <div className="salary">
               <div className="icon">

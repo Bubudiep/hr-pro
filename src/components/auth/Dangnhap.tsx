@@ -11,7 +11,13 @@ interface loginForm {
   password: string;
   remember: boolean;
 }
-const Dangnhap = ({ children }: { children?: ReactNode }) => {
+const Dangnhap = ({
+  children,
+  className,
+}: {
+  children?: ReactNode;
+  className?: string;
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [loginData, setLoginData] = useState<loginForm>({
     username: "",
@@ -35,7 +41,9 @@ const Dangnhap = ({ children }: { children?: ReactNode }) => {
   };
   return (
     <>
-      <div onClick={() => setShowModal(true)}>{children || <></>}</div>
+      <div className={className} onClick={() => setShowModal(true)}>
+        {children || <></>}
+      </div>
       <Modal
         title=""
         open={showModal}

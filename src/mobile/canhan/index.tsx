@@ -6,8 +6,10 @@ import { RiMapPin5Line, RiPagesFill } from "react-icons/ri";
 import ChuaDangnhap from "../../components/auth/ChuaDangnhap";
 import { useAuth } from "../../context/authContext";
 import { TbBuildingCog } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 
 const Canhan_index = () => {
+  const nav = useNavigate();
   const { user, updateProfile } = useAuth();
   return (
     <>
@@ -145,45 +147,69 @@ const Canhan_index = () => {
                   </div>
                 )}
               </div>
+              <div className="flex text-[12px] flex-col bg-white shadow select-none">
+                <div className="p-2 flex justify-between border-b border-[#eee]">
+                  <div className=" font-medium flex gap-1 items-center">
+                    <RiMapPin5Line />
+                    Kinh nghiệm làm việc
+                  </div>
+                  <button
+                    className="flex items-center justify-center border w-6 h-6 
+                    rounded border-[#0003] text-[#0005] active:text-[#07f]
+                    active:border-[#07f] active:shadow active:shadow-[#0077ff6b]"
+                  >
+                    <FaPlus size={10} />
+                  </button>
+                </div>
+                <div className="flex flex-col px-1">
+                  <div className="flex flex-col border-[#eee] p-1">
+                    <div className="py-2 text-[#999]">Chưa đi làm!</div>
+                  </div>
+                  {/* <div className="flex flex-col border-[#eee] p-1">
+                    <div className="flex justify-between">
+                      <div className="time text-[#07f]">Compal</div>
+                      <div className="time">01/2025 - 07/2025</div>
+                    </div>
+                    <div className="flex mt-1 text-[11px] gap-1 flex-wrap">
+                      <div className="px-1.5 py-0.5 border rounded-md border-[#c4c4c4] text-[#555]">
+                        ASSY - Đứng máy
+                      </div>
+                      <div className="px-1.5 py-0.5 border rounded-md border-[#c4c4c4] text-[#555]">
+                        PACKING - Đóng hàng
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col border-t border-[#eee] p-1">
+                    <div className="flex justify-between">
+                      <div className="time text-[#07f]">Arcadyan</div>
+                      <div className="time">02/2023 - 01/2025</div>
+                    </div>
+                    <div className="flex mt-1 text-[11px] gap-1 flex-wrap">
+                      <div className="px-1.5 py-0.5 border rounded-md border-[#c4c4c4] text-[#555]">
+                        SMT - Test hàng
+                      </div>
+                    </div>
+                  </div> */}
+                </div>
+              </div>
             </>
           )}
-          <div className="flex text-[12px] flex-col bg-white shadow select-none">
-            <div className="p-2 flex justify-between border-b border-[#eee]">
-              <div className=" font-medium flex gap-1 items-center">
-                <RiMapPin5Line />
-                Kinh nghiệm làm việc
-              </div>
-              <button className="flex items-center justify-center border w-6 h-6 rounded border-[#0003] text-[#0005]">
-                <FaPlus size={10} />
-              </button>
-            </div>
-            <div className="flex flex-col px-1">
-              <div className="flex flex-col border-[#eee] p-1">
-                <div className="flex justify-between">
-                  <div className="time text-[#07f]">Compal</div>
-                  <div className="time">01/2025 - 07/2025</div>
-                </div>
-                <div className="flex mt-1 text-[11px] gap-1 flex-wrap">
-                  <div className="px-1.5 py-0.5 border rounded-md border-[#c4c4c4] text-[#555]">
-                    ASSY - Đứng máy
-                  </div>
-                  <div className="px-1.5 py-0.5 border rounded-md border-[#c4c4c4] text-[#555]">
-                    PACKING - Đóng hàng
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col border-t border-[#eee] p-1">
-                <div className="flex justify-between">
-                  <div className="time text-[#07f]">Arcadyan</div>
-                  <div className="time">02/2023 - 01/2025</div>
-                </div>
-                <div className="flex mt-1 text-[11px] gap-1 flex-wrap">
-                  <div className="px-1.5 py-0.5 border rounded-md border-[#c4c4c4] text-[#555]">
-                    SMT - Test hàng
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div
+            className="flex w-full justify-center p-2 mt-2 items-center bg-white shadow text-[red]"
+            onClick={() => {
+              Modal.confirm({
+                title: "Cảnh báo",
+                content: "Xác nhận đăng xuất",
+                onOk: () => {
+                  localStorage.removeItem("access_token");
+                  location.reload();
+                },
+                okText: "Xác nhận",
+                cancelText: "Đóng",
+              });
+            }}
+          >
+            Đăng xuất
           </div>
         </div>
       ) : (

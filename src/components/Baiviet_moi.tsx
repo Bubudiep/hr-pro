@@ -12,7 +12,9 @@ import {
   TbSquare,
   TbSquareCheckFilled,
 } from "react-icons/tb";
-import { Select, Tooltip } from "antd";
+import { message, Select, Tooltip } from "antd";
+import { useAuth } from "../context/authContext";
+import Api from "./api";
 
 interface SelectedFile {
   id: number;
@@ -26,18 +28,24 @@ const Baiviet_moi = ({
   showModal: boolean;
   setShowModal: Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const [checkbox, setCheckbox] = useState({
-    tuyendung: false,
-    quangba: false,
-  });
+  const MAX_IMAGES = 3;
+  const MAX_FILE_SIZE_BYTES = 200 * 1024;
+  const [content, setContent] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const { user } = useAuth();
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
     const files = e.target.files;
-    if (!files || files.length === 0) return;
-    const totalCount = selectedFiles.length + files.length;
-    const MAX_IMAGES = 3;
+    if (!files || files.length === 0 || loading) return;
+    setLoading(true);
+    const filesToProcess = Array.from(files);
+    const totalCount = selectedFiles.length + filesToProcess.length;
     if (totalCount > MAX_IMAGES) {
-      alert(`Bạn chỉ có thể chọn tối đa ${MAX_IMAGES} ảnh.`);
+      message.error(`Bạn chỉ có thể chọn tối đa ${MAX_IMAGES} ảnh.`);
+      setLoading(false);
+      e.target.value = "";
       return;
     }
     const newFiles: SelectedFile[] = [];
@@ -45,13 +53,27 @@ const Baiviet_moi = ({
       selectedFiles.length > 0
         ? selectedFiles[selectedFiles.length - 1].id + 1
         : 1;
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const previewUrl = URL.createObjectURL(file); // Tạo URL tạm thời cho preview
-      newFiles.push({ id: currentId++, file, previewUrl });
+    for (const file of filesToProcess) {
+      if (selectedFiles.length >= MAX_IMAGES) break;
+      if (file.size > MAX_FILE_SIZE_BYTES * 10) {
+        message.error(`Tệp ảnh "${file.name}" quá lớn.`);
+        continue;
+      }
+      try {
+        const compressedFile = await Api.compressImage(file);
+        if (compressedFile) {
+          console.log(compressedFile);
+          const previewUrl = URL.createObjectURL(compressedFile);
+          newFiles.push({ id: currentId++, file: compressedFile, previewUrl });
+        }
+      } catch (error) {
+        message.error(
+          `Lỗi xử lý ảnh: ${(error as Error).message || "Không thể nén tệp."}`
+        );
+      }
     }
     setSelectedFiles((prev) => [...prev, ...newFiles]);
+    setLoading(false);
     e.target.value = "";
   };
   const handleRemoveImage = (id: number) => {
@@ -61,8 +83,23 @@ const Baiviet_moi = ({
     }
     setSelectedFiles((prev) => prev.filter((file) => file.id !== id));
   };
+  const handleDangbai = () => {
+    const formData = new FormData();
+    formData.append("noidung", content);
+    selectedFiles.forEach((file) => {
+      formData.append("images", file.file);
+    });
+    Api.post(`/posts/`, formData, user?.access_token)
+      .then((res) => {
+        message.success("Bài viết của bạn đã được đăng!");
+        setShowModal(false);
+      })
+      .catch((e) =>
+        message.error(e?.response?.data?.detail || "Lỗi xảy ra: " + e)
+      );
+  };
   return showModal ? (
-    <div className="flex flex-col top-0 left-0 absolute w-screen h-screen z-99">
+    <div className="flex flex-col top-0 fixed w-screen h-screen z-99">
       <div className="flex relative flex-col bg-white w-full h-full z-1 mt-auto">
         <div
           className="text-[13px] pl-4.5 w-full 
@@ -82,6 +119,8 @@ const Baiviet_moi = ({
         <div className="flex flex-col fadeInTop gap-1">
           <div className="border-b border-[#0002] mb-2">
             <textarea
+              value={content}
+              onChange={(e) => setContent(e?.target?.value)}
               className="border-none w-full p-2 px-4 outline-none h-60"
               placeholder="Viết gì đó...."
             />
@@ -107,106 +146,31 @@ const Baiviet_moi = ({
                   ))}
                 </div>
               )}
-              <label
-                className="items-center justify-center flex relative w-12 h-12 rounded-md 
-              border border-gray-200"
-              >
-                <div className="text">
-                  <BiImageAdd size={18} className="text-[#999]" />
-                </div>
-                <input
-                  id="image-upload-input"
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                  multiple
-                  onChange={handleImageChange}
-                  disabled={selectedFiles.length >= 3}
-                />
-              </label>
-            </div>
-            <div className="flex flex-col gap-1.5 py-1 px-4 text-[#999]">
-              <div className="flex items-center">
+              {selectedFiles.length < 3 && (
                 <label
-                  className={`flex gap-1 items-center ${
-                    checkbox?.tuyendung ? "text-[#07f] font-medium" : ""
-                  }`}
+                  className="items-center justify-center flex relative w-12 h-12 rounded-md 
+                  border border-gray-200"
                 >
-                  <input
-                    type="checkbox"
-                    className="hidden"
-                    checked={checkbox.tuyendung}
-                    onChange={() =>
-                      setCheckbox((o) => ({
-                        ...o,
-                        tuyendung: !o.tuyendung,
-                      }))
-                    }
-                  />
-                  {checkbox?.tuyendung ? (
-                    <TbSquareCheckFilled size={16} />
-                  ) : (
-                    <TbSquare size={16} />
-                  )}
-                  Ghim bài viết
-                </label>
-                <Tooltip
-                  trigger="click"
-                  placement="left"
-                  color="white"
-                  title={
-                    <div className="text-black">
-                      Bài viết sẽ được ghim lên tường của <b>Doanh nghiệp</b>
-                    </div>
-                  }
-                >
-                  <div className="ml-auto text-[16px]">
-                    <TbHelpCircleFilled />
+                  <div className="text">
+                    <BiImageAdd size={18} className="text-[#999]" />
                   </div>
-                </Tooltip>
-              </div>
-              <div className="flex justify-between items-center">
-                <label
-                  className={`flex gap-1 items-center ${
-                    checkbox?.quangba ? "text-[#07f] font-medium" : ""
-                  }`}
-                >
                   <input
-                    type="checkbox"
+                    id="image-upload-input"
+                    type="file"
                     className="hidden"
-                    checked={checkbox.quangba}
-                    onChange={() =>
-                      setCheckbox((o) => ({
-                        ...o,
-                        quangba: !o.quangba,
-                      }))
-                    }
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageChange}
                   />
-                  {checkbox?.quangba ? (
-                    <TbSquareCheckFilled size={16} />
-                  ) : (
-                    <TbSquare size={16} />
-                  )}
-                  Quảng bá bài viết
                 </label>
-                <Tooltip
-                  trigger="click"
-                  placement="left"
-                  color="white"
-                  title={
-                    <div className="text-black">
-                      Bài viết sẽ được chạy quảng cáo
-                    </div>
-                  }
-                >
-                  <div className="ml-auto text-[16px]">
-                    <TbHelpCircleFilled />
-                  </div>
-                </Tooltip>
-              </div>
+              )}
             </div>
             <div className="flex gap-1 px-4">
-              <button className="bg-[#07f] text-white p-2 py-1.5 rounded-md shadow">
+              <button
+                disabled={content == ""}
+                onClick={handleDangbai}
+                className="bg-[#07f] text-white p-2 py-1.5 rounded-md shadow active:bg-[#004ba1]"
+              >
                 Đăng bài viết
               </button>
             </div>

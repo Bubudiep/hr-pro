@@ -25,9 +25,6 @@ interface CustomRequestConfig extends InternalAxiosRequestConfig {
 const api: AxiosInstance = axios.create({
   baseURL: host + "/hr-pro",
   timeout: 10000,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 // Lưu trữ các AbortController và Debounce Timer
 const abortControllers: Record<string, AbortController> = {};
@@ -366,6 +363,160 @@ const removeVietnameseTones = (str: string): string => {
     .replace(/Đ/g, "D");
 };
 
+const MAX_FILE_SIZE_BYTES = 200 * 1024; // 200 KB
+const MAX_INITIAL_DIMENSION = 1200; // Kích thước tối đa ban đầu
+const NEXT_SCALE_REDUCTION = 0.9; // Giảm 10% kích thước vật lý mỗi lần lặp
+const drawScaledImage = (
+  img: HTMLImageElement,
+  scale: number,
+  canvas: HTMLCanvasElement
+): void => {
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas context failed.");
+
+  const newWidth = img.width * scale;
+  const newHeight = img.height * scale;
+
+  // Đảm bảo kích thước không nhỏ hơn 1px
+  canvas.width = Math.max(1, newWidth);
+  canvas.height = Math.max(1, newHeight);
+
+  ctx.drawImage(img, 0, 0, newWidth, newHeight);
+};
+// Hàm nén ảnh client-side (output là PNG, giảm kích thước vật lý liên tục)
+export const compressImage = (file: File): Promise<File | null> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image() as HTMLImageElement;
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let currentScale = 1.0;
+        if (
+          img.width > MAX_INITIAL_DIMENSION ||
+          img.height > MAX_INITIAL_DIMENSION
+        ) {
+          currentScale = Math.min(
+            MAX_INITIAL_DIMENSION / img.width,
+            MAX_INITIAL_DIMENSION / img.height
+          );
+        }
+        drawScaledImage(img, currentScale, canvas);
+        const recursiveCompression = (scale: number): void => {
+          canvas.toBlob((blob) => {
+            if (blob) {
+              if (blob.size <= MAX_FILE_SIZE_BYTES) {
+                const compressedFile = new File(
+                  [blob],
+                  file.name.replace(/\.[^/.]+$/, "") + ".png",
+                  {
+                    type: "image/png",
+                    lastModified: Date.now(),
+                  }
+                );
+                resolve(compressedFile);
+              } else {
+                const newScale = scale * NEXT_SCALE_REDUCTION;
+                if (img.width * newScale < 10 || img.height * newScale < 10) {
+                  reject(
+                    new Error(
+                      `Kích thước ảnh PNG không thể giảm xuống dưới ${
+                        MAX_FILE_SIZE_BYTES / 1024
+                      } KB ngay cả ở kích thước rất nhỏ.`
+                    )
+                  );
+                  return;
+                }
+                try {
+                  drawScaledImage(img, newScale, canvas);
+                  // Đệ quy
+                  recursiveCompression(newScale);
+                } catch (e) {
+                  reject(e as Error);
+                }
+              }
+            } else {
+              reject(new Error("Lỗi nén ảnh thành Blob."));
+            }
+          }, "image/png");
+        };
+
+        recursiveCompression(currentScale);
+      };
+      img.onerror = () => reject(new Error("Lỗi tải ảnh vào bộ nhớ."));
+    };
+    reader.onerror = () => reject(new Error("Lỗi đọc file."));
+  });
+};
+
+function timeSinceOrder(createdAt: string, language = "en") {
+  const orderDate = new Date(createdAt || "");
+  const now = new Date();
+  const diffMs = now.getTime() - orderDate.getTime();
+  const timeUnits = [
+    { unit: "minute", value: 60 },
+    { unit: "hour", value: 24 },
+    { unit: "day", value: 30 },
+    { unit: "month", value: 12 },
+    { unit: "year", value: Infinity },
+  ];
+
+  let diff = Math.floor(diffMs / 60000); // Chuyển đổi sang phút
+  if (diff < 1) return language === "en" ? "now" : "bây giờ";
+
+  for (const { unit, value } of timeUnits) {
+    if (diff < value) {
+      return language === "en"
+        ? `${diff} ${unit}${diff !== 1 ? "s" : ""} ago`
+        : `${diff} ${
+            unit === "minute"
+              ? "phút"
+              : unit === "hour"
+              ? "giờ"
+              : unit === "day"
+              ? "ngày"
+              : unit === "month"
+              ? "tháng"
+              : "năm"
+          } trước`;
+    }
+    diff = Math.floor(diff / value);
+  }
+}
+function timeUntil(targetDateTime: string, unit = "auto") {
+  const now = new Date();
+  const target = new Date(targetDateTime);
+  const diffMs = target.getTime() - now.getTime();
+  if (diffMs <= 0) {
+    return timeSinceOrder(targetDateTime, "vn");
+  }
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  switch (unit.toLowerCase()) {
+    case "days":
+      return `${diffDays} ngày`;
+    case "hours":
+      return `${diffHours} giờ`;
+    case "minutes":
+      return `${diffMinutes} phút`;
+    case "seconds":
+      return `${diffSeconds} giây`;
+    case "auto":
+    default:
+      if (diffDays > 0) {
+        return `${diffDays} days left`;
+      } else if (diffHours > 0) {
+        return `${diffHours} hours left`;
+      } else {
+        return `${diffMinutes} minutes left`;
+      }
+  }
+}
 // 10. Export module
 interface HRProAPIModule {
   removeVietnameseTones: (str: string) => string;
@@ -378,6 +529,8 @@ interface HRProAPIModule {
   patch: typeof debouncePatch;
   delete: typeof debounceDelete;
   key: string;
+  timeUntil: (target: string) => void;
+  compressImage: (file: File) => Promise<File | null>;
 }
 
 const Api: HRProAPIModule = {
@@ -391,6 +544,8 @@ const Api: HRProAPIModule = {
   patch: debouncePatch,
   delete: debounceDelete,
   key,
+  timeUntil,
+  compressImage,
 };
 
 export default Api;

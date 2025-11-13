@@ -11,169 +11,62 @@ import { AiOutlineLike } from "react-icons/ai";
 import { RiShareForwardFill } from "react-icons/ri";
 import New_post from "./new_post";
 import { useCallback, useEffect, useRef, useState } from "react";
+import Api from "../../components/api";
+import { useAuth } from "../../context/authContext";
+import User_info from "./User_info";
+
+interface ImageType {
+  id: number;
+  image: string;
+}
+interface PostsType {
+  id: number;
+  images: ImageType[];
+  lat_location: string;
+  likes: [];
+  likes_count: 0;
+  loadeds: [];
+  location_name: string;
+  long_location: string;
+  noidung: string;
+  shares: [];
+  shares_count: 0;
+  user: 1;
+  username: string;
+  vieweds: [];
+  more: boolean;
+  views_count: number;
+  updated_at: string;
+  created_at: string;
+}
 
 const News_index = () => {
-  const [loading, setLoading] = useState(false);
+  const [postLoading, setPostLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      user: {
-        name: "Nguyễn Văn A",
-        avatar: "https://i.pravatar.cc/150?img=1",
-      },
-      company: "Compal",
-      emoji: "đang vui",
-      location: "Bá Thiện II",
-      time: "2 giờ trước",
-      content: "Hôm nay trời đẹp quá, đi dạo thôi 🌤️",
-      image: "https://picsum.photos/id/237/400/300", // ảnh cố định
+  const [posts, setPosts] = useState<PostsType[]>([]);
+  const { user, loading } = useAuth();
+  const loadMorePosts = useCallback(
+    (limit: number = 10) => {
+      if (postLoading || !hasMore) return;
+      setHasMore(true);
+      setPostLoading(true);
+      const loaded_ids = [...new Set(posts?.map((p) => p.id))].join(",");
+      Api.get(
+        `/posts/?page_size=${limit}&show_ids=${loaded_ids}`,
+        user?.access_token || localStorage.getItem("access_token") || ""
+      )
+        .then((res) => {
+          if (res?.count === 0) setHasMore(false);
+          setPosts((prevPosts) => [...prevPosts, ...res.results]);
+        })
+        .finally(() => setPostLoading(false));
     },
-    {
-      id: 2,
-      user: {
-        name: "Trần Thị B",
-        avatar: "https://i.pravatar.cc/150?img=2",
-      },
-      emoji: "đang thấy sốc",
-      time: "5 giờ trước",
-      location: "Bá Thiện I",
-      content: "Núi này to vãi.",
-      image: "https://picsum.photos/id/235/400/300", // ảnh cố định
-    },
-    {
-      id: 3,
-      user: {
-        name: "Huỳnh Đức Bắc",
-        avatar: "https://i.pravatar.cc/150?img=3",
-      },
-      emoji: "",
-      time: "5 giờ trước",
-      location: "Bá Thiện I",
-      content: "Tàu lừ nè mọi người 🍲",
-      image: "https://picsum.photos/id/233/400/300", // ảnh cố định
-    },
-    {
-      id: 4,
-      user: {
-        name: "Huỳnh Đức Bắc",
-        avatar: "https://i.pravatar.cc/150?img=4",
-      },
-      emoji: "",
-      time: "5 giờ trước",
-      location: "Bá Thiện I",
-      content: "Tàu lừ nè mọi người 🍲",
-      image: "https://picsum.photos/id/234/400/300", // ảnh cố định
-    },
-    {
-      id: 5,
-      user: {
-        name: "Huỳnh Đức Bắc",
-        avatar: "https://i.pravatar.cc/150?img=5",
-      },
-      emoji: "",
-      time: "5 giờ trước",
-      location: "Bá Thiện I",
-      content: "Tàu lừ nè mọi người 🍲",
-      image: "https://picsum.photos/id/235/400/300", // ảnh cố định
-    },
-    {
-      id: 6,
-      user: {
-        name: "Huỳnh Đức Bắc",
-        avatar: "https://i.pravatar.cc/150?img=6",
-      },
-      emoji: "",
-      time: "5 giờ trước",
-      location: "Bá Thiện I",
-      content: "Tàu lừ nè mọi người 🍲",
-      image: "https://picsum.photos/id/236/400/300", // ảnh cố định
-    },
-    {
-      id: 7,
-      user: {
-        name: "Huỳnh Đức Bắc",
-        avatar: "https://i.pravatar.cc/150?img=7",
-      },
-      emoji: "",
-      time: "5 giờ trước",
-      location: "Bá Thiện I",
-      content: "Tàu lừ nè mọi người 🍲",
-      image: "https://picsum.photos/id/237/400/300", // ảnh cố định
-    },
-    {
-      id: 8,
-      user: {
-        name: "Huỳnh Đức Bắc",
-        avatar: "https://i.pravatar.cc/150?img=8",
-      },
-      emoji: "",
-      time: "5 giờ trước",
-      location: "Bá Thiện I",
-      content: "Tàu lừ nè mọi người 🍲",
-      image: "https://picsum.photos/id/238/400/300", // ảnh cố định
-    },
-    {
-      id: 9,
-      user: {
-        name: "Huỳnh Đức Bắc",
-        avatar: "https://i.pravatar.cc/150?img=9",
-      },
-      emoji: "",
-      time: "5 giờ trước",
-      location: "Bá Thiện I",
-      content: "Tàu lừ nè mọi người 🍲",
-      image: "https://picsum.photos/id/239/400/300", // ảnh cố định
-    },
-    {
-      id: 10,
-      user: {
-        name: "Huỳnh Đức Bắc",
-        avatar: "https://i.pravatar.cc/150?img=10",
-      },
-      emoji: "",
-      time: "5 giờ trước",
-      location: "Bá Thiện I",
-      content: "Tàu lừ nè mọi người 🍲",
-      image: "https://picsum.photos/id/240/400/300", // ảnh cố định
-    },
-  ]);
-  const fetchNewPosts = (startId = 0, limit = 6) => {
-    console.log("Đang tải:", startId, limit);
-    const newPosts = [];
-    for (let i = 0; i < limit; i++) {
-      const id = startId + i;
-      newPosts.push({
-        id: id,
-        user: {
-          name: `Người dùng mới ${id}`,
-          avatar: `https://i.pravatar.cc/150?img=${20 + id}`,
-        },
-        emoji: `đang làm việc`,
-        company: "Compal",
-        location: "Bá Thiện III",
-        time: `${Math.floor(Math.random() * 10) + 1} phút trước`,
-        content: `Đây là bài viết mới được tải lên lần cuộn thứ ${Math.ceil(
-          id / 3
-        )}.`,
-        image: `https://picsum.photos/id/${100 + id}/400/300`,
-      });
-    }
-    return newPosts;
-  };
-  const loadMorePosts = useCallback(() => {
-    if (loading || !hasMore) return;
-    setHasMore(true);
-    setLoading(true);
-    const nextId = posts.length + 1;
-    const newPosts = fetchNewPosts(nextId, 10);
-    setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-    setLoading(false);
-    if (posts.length + newPosts.length >= 200) {
-      setHasMore(false);
-    }
-  }, [loading, hasMore, posts.length]);
+    [postLoading, hasMore, posts.length]
+  );
+  useEffect(() => {
+    if (!user?.id) loadMorePosts(20);
+  }, [loading]);
   useEffect(() => {
     const element = scrollRef.current; // Lấy ra phần tử DOM
     if (!element) return; // Đảm bảo phần tử tồn tại
@@ -202,24 +95,8 @@ const News_index = () => {
       <New_post />
       {posts.map((post) => (
         <div key={post.id} className="bg-white shadow mt-1">
-          <div className="flex items-center p-3">
-            <img
-              src={post.user.avatar}
-              alt={post.user.name}
-              className="w-10 h-10 mr-3"
-            />
-            <div className="flex flex-col">
-              <div className="flex gap-1 text-[12px] items-baseline">
-                <p className="font-semibold">{post.user.name}</p>
-              </div>
-              <span className="text-gray-500 flex items-center mt-0.5 gap-1 text-[10px] leading-[1.2]">
-                {post?.company && `${post?.company}, `}
-                {post.location}
-              </span>
-              <span className="text-gray-500 text-[9px] leading-[1.3]">
-                {post.time}
-              </span>
-            </div>
+          <div className="flex items-center p-3 pb-1">
+            <User_info user_id={post.id} time={post?.created_at} />
             <Tooltip
               trigger="click"
               color="white"
@@ -246,15 +123,43 @@ const News_index = () => {
               </div>
             </Tooltip>
           </div>
-          <div className="px-3 pb-2">
-            <p className="text-sm mb-2">{post.content}</p>
-            {post.image && (
-              <BlurImage
-                src={post.image}
-                alt="post"
-                className="rounded-md w-full object-cover"
-              />
-            )}
+          <div className="px-3 pb-2 flex flex-col overflow-hidden text-[13px]">
+            <div>
+              <pre className={`text-sm ${post?.more ? "" : "line-clamp-3"}`}>
+                {post.noidung}
+              </pre>
+              {post.noidung?.split("\r")?.length > 3 && (
+                <div
+                  className="text-[#999] inline"
+                  onClick={() =>
+                    setPosts((o) =>
+                      o?.map((p) =>
+                        p.id === post.id ? { ...p, more: !p?.more } : p
+                      )
+                    )
+                  }
+                >
+                  Xem thêm
+                </div>
+              )}
+            </div>
+            <div className="flex gap-1 mt-2">
+              {post?.images?.map((img) => (
+                <img
+                  key={img.id}
+                  src={img.image}
+                  alt="post"
+                  className={`max-h-[180px] rounded-md w-full object-cover flex-1 border border-[#eee] bg-[#eee]
+                  ${
+                    post?.images?.length === 3
+                      ? "aspect-1/3"
+                      : post?.images?.length === 2
+                      ? "aspect-3/2"
+                      : "aspect-5/3"
+                  }`}
+                />
+              ))}
+            </div>
           </div>
           <div className="flex justify-around h-10 border-t border-[#0003] text-[#999] text-sm">
             <button className="flex items-center flex-1 justify-center gap-1 hover:text-[#07f]">
@@ -269,9 +174,9 @@ const News_index = () => {
           </div>
         </div>
       ))}
-      {loading && (
+      {postLoading && (
         <div className="flex absolute w-screen top-8 items-center justify-center fadeInBot">
-          <div className="flex p-4 rounded-full bg-white">
+          <div className="flex p-4 rounded-full bg-white shadow">
             <Spin />
           </div>
         </div>

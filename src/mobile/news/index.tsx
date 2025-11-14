@@ -184,11 +184,10 @@ const News_index = () => {
       {!hasMore && (
         <div className="flex gap-2 top-8 text-[#999] p-8 items-center justify-center">
           <div
-            className="flex gap-3 bg-white p-2 items-center px-4 rounded-md shadow"
+            className="flex gap-3 p-2 items-center px-4"
             onClick={handleScrollToTop}
           >
-            <BiSolidUpArrowCircle size={18} />
-            Về đầu trang!
+            Đã hết bài viết!
           </div>
         </div>
       )}

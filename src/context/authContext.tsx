@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import Api from "../components/api";
 import { message } from "antd";
+import { getMaxUpdatedAt, putMultiple, syncInit } from "../db/App_db";
 interface UpdateProfileType {
   tag?: string;
   level_name?: string;
@@ -47,6 +48,8 @@ interface UserType {
 interface AuthContextType {
   user: UserType | undefined;
   loading: boolean;
+  init: { companies: any[]; ips: any[]; tags: any[] };
+  setInit: any;
   config: {
     taskbar: boolean;
   };
@@ -56,7 +59,7 @@ interface AuthContextType {
     remember: boolean,
     callback: (e: boolean) => void
   ) => void;
-  auto_login: (callback: (e: boolean) => void) => void;
+  auto_login: (callback: (e: boolean) => void) => Promise<void>;
   logout: () => void;
   updateProfile: (e: UpdateProfileType) => void;
 }
@@ -66,22 +69,26 @@ interface AuthProviderProps {
 }
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<UserType | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [config, setConfig] = useState({ taskbar: true });
-  const auto_login = (callback?: (e: boolean) => void) => {
+  const [init, setInit] = useState({ companies: [], ips: [], tags: [] });
+  const auto_login = async (callback?: (e: boolean) => void) => {
+    setLoading(true);
+    let success = false;
     const access_token: string = localStorage.getItem("access_token") || "";
     if (access_token) {
-      setLoading(true);
       Api.get("/user/", access_token)
         .then((res) => {
           setUser({ ...res, access_token: access_token });
-          if (callback) callback(true);
+          success = true;
         })
         .catch((e) => {
           console.log(e);
-        })
-        .finally(() => setLoading(false));
+        });
     }
+    await syncInit(access_token || "");
+    if (callback) callback(success);
+    setLoading(false);
   };
   const login = (
     username: string,
@@ -140,6 +147,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
   };
   const value = {
+    init,
+    setInit,
     user,
     loading,
     config,

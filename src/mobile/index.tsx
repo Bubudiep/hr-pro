@@ -8,6 +8,8 @@ import Canhan_index from "./canhan";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { Spin } from "antd";
+import Api from "../components/api";
+import { getData } from "../db/App_db";
 const tabOrder = ["cong", "luong", "news", "lichtuyen", "canhan"];
 const Mobile_index = () => {
   const { tab } = useParams();
@@ -15,13 +17,13 @@ const Mobile_index = () => {
   const { auto_login, loading } = useAuth();
   const [showLoad, setShowload] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState(tab || "news");
+  const { user, setInit } = useAuth();
   useEffect(() => {
     if (tab && activeTab !== tab) {
       setActiveTab(tab);
     }
   }, [tab]);
   useEffect(() => {
-    console.log(loading);
     if (loading) {
       setShowload(true);
     } else {
@@ -31,11 +33,20 @@ const Mobile_index = () => {
     }
   }, [loading]);
   useEffect(() => {
-    auto_login((e: boolean) => {
-      if (e === false) {
-        console.log("Tự động đăng nhập không thành công!");
-      }
-    });
+    const autoLogin = async () => {
+      await auto_login((e: boolean) => {
+        if (e === false) {
+          console.log("Tự động đăng nhập không thành công!");
+        } else {
+          console.log("Tự động đăng nhập thành công!");
+        }
+      });
+      const qs_ips = await getData("KhuCongNghiep");
+      const qs_comp = await getData("CongTy");
+      const qs_tag = await getData("TinTag");
+      setInit({ companies: qs_comp, ips: qs_ips, tags: qs_tag });
+    };
+    autoLogin();
   }, []);
   const handleTabChange = (newTab: string) => {
     setActiveTab(newTab);

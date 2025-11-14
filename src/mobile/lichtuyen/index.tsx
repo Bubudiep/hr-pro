@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; // BẮT BUỘC
 import "slick-carousel/slick/slick-theme.css"; // BẮT BUỘC
@@ -14,6 +14,8 @@ import {
   TbAlertSquareRounded,
   TbAlertSquareRoundedFilled,
 } from "react-icons/tb";
+import { getData } from "../../db/App_db";
+import { useAuth } from "../../context/authContext";
 
 const Lichtuyen_index = () => {
   const settings = {
@@ -26,7 +28,22 @@ const Lichtuyen_index = () => {
     autoplaySpeed: 4000, // Thời gian chuyển slide
     arrows: false, // Ẩn mũi tên điều hướng
   };
-
+  const [activeTab, setActiveTab] = useState<string>("all");
+  const [listIP, setListIP] = useState<any[]>(["all"]);
+  const [tinTuyen, setTinTuyen] = useState<any[]>([]);
+  const { init, loading } = useAuth();
+  useEffect(() => {
+    if (!loading) {
+      const fetchData = async () => {
+        const qs_ip = await getData("KhuCongNghiep");
+        const qs_tin = await getData("TuyenDung");
+        setListIP(qs_ip);
+        setTinTuyen(qs_tin);
+      };
+      console.log(init);
+      fetchData();
+    }
+  }, [loading]);
   return (
     <div className="flex flex-col max-w-screen overflow-y-auto pb-44">
       <div className="min-h-14 sticky top-0 z-10 bg-white shadow pl-2 flex items-center">
@@ -65,72 +82,94 @@ const Lichtuyen_index = () => {
       </div>
       <div className="flex flex-col px-4">
         <div className="filter flex gap-2 overflow-x-auto mb-2 snap-x px-0">
-          <div className="item active">Tất cả</div>
-          <div className="item">Bá Thiện I</div>
-          <div className="item">Bá Thiện II</div>
-          <div className="item">Bình Xuyên I</div>
-          <div className="item">Bình Xuyên II</div>
-          <div className="item">Thăng Long 3</div>
+          <div
+            className={`item ${activeTab === "all" ? "active" : ""}`}
+            onClick={() => setActiveTab("all")}
+          >
+            Tất cả
+          </div>
+          {listIP?.map((ip) => (
+            <div
+              className={`item ${activeTab === ip?.name ? "active" : ""}`}
+              onClick={() => setActiveTab(ip?.name)}
+            >
+              {ip?.name}
+            </div>
+          ))}
         </div>
         <div className="font-medium flex items-center gap-1">
           <BsBookmarkHeartFill size={16} />
           Phù hợp với bạn
         </div>
         <div className="lichtuyen flex mt-2">
-          <div className="item">
-            <Tooltip
-              title={
-                <div className="flex flex-col text-black p-1 min-w-[200px]">
-                  <div className="flex flex-col text-[13px] text-[#22242c]">
-                    <div className="flex gap-1 font-medium items-center">
+          {tinTuyen?.map((tin) => {
+            const comp = init?.companies?.find((c) => c?.id === tin?.companies);
+            return (
+              <div className="item">
+                {tin?.thuong && (
+                  <Tooltip
+                    title={
+                      tin?.dieukien_thuong ? (
+                        <div className="flex flex-col text-black p-1 min-w-[200px]">
+                          <div className="flex flex-col text-[13px] text-[#22242c]">
+                            <div className="flex gap-1 font-medium items-center">
+                              <TbAlertSquareRoundedFilled />
+                              Điều kiện:
+                            </div>
+                            <div className="flex flex-col bg-[#eee] rounded p-1 px-2 mt-1">
+                              <pre>{tin?.dieukien_thuong || ""}</pre>
+                            </div>
+                          </div>
+                          <div className="btn justify-center ungtuyen relative! mt-2 h-8 py-0! px-2!">
+                            Ứng tuyển ngay!
+                          </div>
+                        </div>
+                      ) : (
+                        false
+                      )
+                    }
+                    color="white"
+                    trigger="click"
+                    placement="topLeft"
+                  >
+                    <div className="hot-card">
                       <TbAlertSquareRoundedFilled />
-                      Điều kiện:
+                      Thưởng {tin?.thuong?.toLocaleString()}Đ
                     </div>
-                    <div className="flex flex-col bg-[#eee] rounded p-1 px-2 mt-1">
-                      <div className="flex">- Là công nhân mới</div>
-                      <div className="flex">- Làm đủ 10 ngày công</div>
+                  </Tooltip>
+                )}
+                <div className="flex gap-2">
+                  <div className="avatar">
+                    <img src={comp?.logo} />
+                  </div>
+                  <div className="information">
+                    <div className="title">
+                      ({tin?.bophan}) {tin?.vitri}
+                    </div>
+                    <div className="name">{comp?.name}</div>
+                    <div className="address">
+                      <FaLocationDot size={10} className="mb-px" />
+                      {comp?.address || "Chưa rõ"}
                     </div>
                   </div>
-                  <div className="btn justify-center ungtuyen relative! mt-2 h-8 py-0! px-2!">
-                    Ứng tuyển ngay!
+                </div>
+                <div className="details">
+                  <div className="dt-item">
+                    {tin?.min_old} - {tin?.max_old} tuổi
                   </div>
+                  {/* <div className="dt-item">Phòng sạch</div>
+                  <div className="dt-item">Cửa từ</div> */}
                 </div>
-              }
-              color="white"
-              trigger="click"
-              placement="topLeft"
-            >
-              <div className="hot-card">
-                <TbAlertSquareRoundedFilled />
-                Thưởng 1Tr
-              </div>
-            </Tooltip>
-            <div className="flex gap-2">
-              <div className="avatar">
-                <img src="https://media.licdn.com/dms/image/v2/D4D0BAQGMYqiU1GnehQ/company-logo_200_200/B4DZY4vvROGwAM-/0/1744708761120/compal_logo?e=2147483647&v=beta&t=YSUJcJQd8Foa9X1zr-KqRje8LMrbsKLXugkfvBeoJ-g" />
-              </div>
-              <div className="information">
-                <div className="title">Bảo an</div>
-                <div className="name">Compal</div>
-                <div className="address">
-                  <FaLocationDot size={10} className="mb-px" />
-                  Bá Thiện I - Bình Xuyên - Phú Thọ
+                <div className="salary">
+                  <div className="icon">
+                    <MdOutlineAttachMoney size={15} />
+                  </div>
+                  {tin?.mucluong || "Liên hệ"}
+                  <div className="btn ungtuyen">Ứng tuyển</div>
                 </div>
               </div>
-            </div>
-            <div className="details">
-              <div className="dt-item">40 - 52 tuổi</div>
-              <div className="dt-item">Phòng sạch</div>
-              <div className="dt-item">Cửa từ</div>
-            </div>
-            <div className="salary">
-              <div className="icon">
-                <MdOutlineAttachMoney size={15} />
-              </div>
-              8-12 Triệu
-              <div className="btn ungtuyen">Ứng tuyển</div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>

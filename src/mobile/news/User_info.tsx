@@ -6,7 +6,11 @@ import { Tooltip } from "antd";
 import Dangnhap from "../../components/auth/Dangnhap";
 
 const User_info = ({ user_id, time }: { user_id: number; time: string }) => {
-  const post = {};
+  const post = {
+    user: { avatar: "", name: "" },
+    company: "",
+    location: "",
+  };
   return (
     <>
       {post?.user?.avatar ? (
@@ -40,7 +44,7 @@ const User_info = ({ user_id, time }: { user_id: number; time: string }) => {
           {post?.location || "-"}
         </span>
         <span className="text-gray-500 text-[9px] leading-[1.3]">
-          {Api.timeUntil(time)}
+          {Api.timeUntil(time, "auto")}
         </span>
       </div>
     </>

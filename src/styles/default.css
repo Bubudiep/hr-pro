@@ -148,6 +148,25 @@ button {
       margin: 0px !important;
     }
   }
+  &.no-footer {
+    .ant-modal-body {
+      @apply pb-0 pt-2;
+      .ant-form {
+        padding-bottom: 8px;
+        .ant-form-item {
+          margin-bottom: 6px;
+          &.btn {
+            .ant-form-item-control-input-content {
+              display: flex;
+              gap: 6px;
+              justify-content: end;
+              margin-top: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 .slick-slider {
   .slick-list {

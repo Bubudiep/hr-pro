@@ -6,7 +6,7 @@ import { RiMapPin5Line, RiPagesFill } from "react-icons/ri";
 import ChuaDangnhap from "../../components/auth/ChuaDangnhap";
 import { useAuth } from "../../context/authContext";
 import { TbBuildingCog } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const Canhan_index = () => {
   const nav = useNavigate();
@@ -14,7 +14,8 @@ const Canhan_index = () => {
   return (
     <>
       {user?.id ? (
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 relative">
+          <Outlet />
           <div className="flex bg-white shadow p-2 gap-2">
             <div className="avatar w-20 h-20 bg-[#235fa3]"></div>
             <div className="flex flex-col">
@@ -36,7 +37,10 @@ const Canhan_index = () => {
           </div>
           {user?.profile?.level === "admin" && (
             <>
-              <div className="flex text-[12px] gap-2 items-center bg-white shadow p-2 select-none">
+              <Link
+                to="/mobile/canhan/congty"
+                className="flex text-[12px] gap-2 items-center bg-white shadow p-2 select-none"
+              >
                 <div className="flex min-w-10 w-10 h-10 items-center bg-[#2e3236] justify-center">
                   <TbBuildingCog size={20} color="#fff" />
                 </div>
@@ -50,7 +54,7 @@ const Canhan_index = () => {
                     Thêm sửa xóa danh sách công ty
                   </div>
                 </div>
-              </div>
+              </Link>
               <div className="flex text-[12px] gap-2 items-center bg-white shadow p-2 select-none">
                 <div className="flex min-w-10 w-10 h-10 items-center bg-[#2e3236] justify-center">
                   <FaUsersLine size={20} color="#fff" />

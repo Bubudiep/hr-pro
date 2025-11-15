@@ -462,10 +462,8 @@ function timeSinceOrder(createdAt: string, language = "en") {
     { unit: "month", value: 12 },
     { unit: "year", value: Infinity },
   ];
-
   let diff = Math.floor(diffMs / 60000); // Chuyển đổi sang phút
   if (diff < 1) return language === "en" ? "now" : "bây giờ";
-
   for (const { unit, value } of timeUnits) {
     if (diff < value) {
       return language === "en"
@@ -485,7 +483,7 @@ function timeSinceOrder(createdAt: string, language = "en") {
     diff = Math.floor(diff / value);
   }
 }
-function timeUntil(targetDateTime: string, unit = "auto") {
+function timeUntil(targetDateTime: string, unit: string = "auto") {
   const now = new Date();
   const target = new Date(targetDateTime);
   const diffMs = target.getTime() - now.getTime();
@@ -517,7 +515,6 @@ function timeUntil(targetDateTime: string, unit = "auto") {
       }
   }
 }
-// 10. Export module
 interface HRProAPIModule {
   removeVietnameseTones: (str: string) => string;
   numberToVietnameseText: (number: number | string) => string;
@@ -529,7 +526,7 @@ interface HRProAPIModule {
   patch: typeof debouncePatch;
   delete: typeof debounceDelete;
   key: string;
-  timeUntil: (target: string) => void;
+  timeUntil: (target: string, unit: string) => string | undefined;
   compressImage: (file: File) => Promise<File | null>;
 }
 

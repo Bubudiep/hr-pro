@@ -29,7 +29,7 @@ const Lichtuyen_index = () => {
     arrows: false, // Ẩn mũi tên điều hướng
   };
   const [activeTab, setActiveTab] = useState<string>("all");
-  const [listIP, setListIP] = useState<any[]>(["all"]);
+  const [listIP, setListIP] = useState<any[]>([]);
   const [tinTuyen, setTinTuyen] = useState<any[]>([]);
   const { init, loading } = useAuth();
   useEffect(() => {
@@ -90,6 +90,7 @@ const Lichtuyen_index = () => {
           </div>
           {listIP?.map((ip) => (
             <div
+              key={ip?.id}
               className={`item ${activeTab === ip?.name ? "active" : ""}`}
               onClick={() => setActiveTab(ip?.name)}
             >
@@ -105,7 +106,7 @@ const Lichtuyen_index = () => {
           {tinTuyen?.map((tin) => {
             const comp = init?.companies?.find((c) => c?.id === tin?.companies);
             return (
-              <div className="item">
+              <div className="item" key={tin?.id}>
                 {tin?.thuong && (
                   <Tooltip
                     title={

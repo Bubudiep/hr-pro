@@ -32,13 +32,21 @@ const Dangky = ({ children }: { children?: ReactNode }) => {
     setLoadingReg(true);
     Api.post("/reg/", modalData)
       .then((res) => {
-        setShowModal(false);
-        login(
-          modalData?.username || "",
-          modalData?.password || "",
-          true,
-          handleCallback
-        );
+        Modal.confirm({
+          title: "Đăng ký thành công",
+          content: "Bạn có muốn tự động đăng nhập luôn không?",
+          okText: "Có",
+          cancelText: "Không",
+          onOk: () => {
+            setShowModal(false);
+            login(
+              modalData?.username || "",
+              modalData?.password || "",
+              true,
+              handleCallback
+            );
+          },
+        });
       })
       .catch((e) => Api.error(e))
       .finally(() => setLoadingReg(false));

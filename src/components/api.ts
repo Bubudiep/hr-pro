@@ -217,14 +217,15 @@ export const debounceDelete = <T = any>(
   createDebouncedRequest<T>("delete", url, undefined, token, delay);
 
 // 6. Hàm xử lý lỗi
-const error = (e: AxiosError | any): void => {
+const error = (e: AxiosError | any, option?: string): void => {
   const data = e?.response?.data;
+  console.log(data);
   const errorMessage =
     data?.detail ||
     data?.details ||
     data?.error ||
     data?.errors ||
-    "Có lỗi xảy ra!";
+    (option ? option : "Có lỗi xảy ra!");
   message.error(errorMessage);
 };
 

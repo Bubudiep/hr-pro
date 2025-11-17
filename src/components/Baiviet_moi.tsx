@@ -12,7 +12,7 @@ import {
   TbSquare,
   TbSquareCheckFilled,
 } from "react-icons/tb";
-import { message, Select, Tooltip } from "antd";
+import { message, Modal, Select, Tooltip } from "antd";
 import { useAuth } from "../context/authContext";
 import Api from "./api";
 
@@ -91,7 +91,14 @@ const Baiviet_moi = ({
     });
     Api.post(`/posts/`, formData, user?.access_token)
       .then((res) => {
-        message.success("Bài viết của bạn đã được đăng!");
+        // message.success("Bài viết của bạn đã được đăng!");
+        Modal.confirm({
+          title: "Thành công!",
+          content: "Bài viết của bạn đã được đăng và đăng chờ phê duyệt!",
+          maskClosable: true,
+          okText: "Đã hiểu",
+          cancelText: "Đóng",
+        });
         setShowModal(false);
       })
       .catch((e) =>

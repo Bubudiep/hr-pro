@@ -1,13 +1,48 @@
-import { Modal } from "antd";
+import { message, Modal } from "antd";
 import React, { useState, type ReactNode } from "react";
 import { FaUser } from "react-icons/fa";
 import { HiLockClosed } from "react-icons/hi";
 import logo from "../../assets/image/logo.png";
 import zalo from "../../assets/image/zalo.png";
 import { MdOutlinePassword } from "react-icons/md";
+import Api from "../api";
+import { useAuth } from "../../context/authContext";
 
 const Dangky = ({ children }: { children?: ReactNode }) => {
   const [showModal, setShowModal] = useState(false);
+  const [loadingReg, setLoadingReg] = useState(false);
+  const [modalData, setModalData] = useState({
+    username: "",
+    password: "",
+    "re-password": "",
+  });
+  const { login } = useAuth();
+  const handleCallback = (e: boolean) => {
+    console.log(e);
+  };
+  const handleDangky = () => {
+    if (modalData.password.length < 6) {
+      message.error("Mật khẩu phải từ 6 ký tự trở lên!");
+      return;
+    }
+    if (modalData.password !== modalData["re-password"]) {
+      message.error("Mật khẩu không khớp nhau!");
+      return;
+    }
+    setLoadingReg(true);
+    Api.post("/reg/", modalData)
+      .then((res) => {
+        setShowModal(false);
+        login(
+          modalData?.username || "",
+          modalData?.password || "",
+          true,
+          handleCallback
+        );
+      })
+      .catch((e) => Api.error(e))
+      .finally(() => setLoadingReg(false));
+  };
   return (
     <>
       <div onClick={() => setShowModal(true)}>{children || <></>}</div>
@@ -16,6 +51,8 @@ const Dangky = ({ children }: { children?: ReactNode }) => {
         onCancel={() => setShowModal(false)}
         okText="Đăng ký"
         cancelText="Đóng"
+        confirmLoading={loadingReg}
+        onOk={handleDangky}
       >
         <div className="flex flex-col gap-2">
           <div className="flex gap-1 items-baseline mt-4">
@@ -30,7 +67,14 @@ const Dangky = ({ children }: { children?: ReactNode }) => {
                     focus-within:shadow-[#0077ff31]"
           >
             <FaUser className="px-2 w-7 focus:text-[#07f]" size={22} />
-            <input className="outline-0 ml-1" placeholder="Số điện thoại..." />
+            <input
+              value={modalData?.username}
+              onChange={(e) =>
+                setModalData((o) => ({ ...o, username: e?.target.value }))
+              }
+              className="outline-0 ml-1 w-full"
+              placeholder="Số điện thoại..."
+            />
           </div>
           <div
             className="flex border border-[#0003] p-2 rounded-md transition-all
@@ -42,7 +86,11 @@ const Dangky = ({ children }: { children?: ReactNode }) => {
               size={18}
             />
             <input
-              className="outline-0 ml-1"
+              value={modalData?.password}
+              onChange={(e) =>
+                setModalData((o) => ({ ...o, password: e?.target.value }))
+              }
+              className="outline-0 ml-1 w-full"
               type="password"
               placeholder="Mật khẩu..."
             />
@@ -57,12 +105,19 @@ const Dangky = ({ children }: { children?: ReactNode }) => {
               size={18}
             />
             <input
-              className="outline-0 ml-1"
+              value={modalData?.["re-password"]}
+              onChange={(e) =>
+                setModalData((o) => ({
+                  ...o,
+                  ["re-password"]: e?.target.value,
+                }))
+              }
+              className="outline-0 ml-1 w-full"
               type="password"
               placeholder="Nhập lại mật khẩu..."
             />
           </div>
-          <div className="flex text-[12px] text-[#00a6ff] font-medium">
+          {/* <div className="flex text-[12px] text-[#00a6ff] font-medium">
             Tùy chọn:
           </div>
           <div className="rounded-md text-[#364972] border border-[#d9e3f8] items-center bg-[#c9dbf052] p-2 gap-3 text-[13px] flex">
@@ -70,7 +125,7 @@ const Dangky = ({ children }: { children?: ReactNode }) => {
               <img src={zalo} />
             </div>
             Đăng ký bằng tài khoản Zalo
-          </div>
+          </div> */}
         </div>
       </Modal>
     </>

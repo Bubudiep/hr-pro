@@ -4,7 +4,7 @@ import React, { useState, useEffect, type ReactNode } from "react";
 import { FaRegImage, FaTrash } from "react-icons/fa";
 import { useAuth } from "../../../context/authContext";
 import Api from "../../../components/api";
-import { putMultiple } from "../../../db/App_db";
+import { bulkDelete, putMultiple } from "../../../db/App_db";
 
 interface Company {
   id: number;
@@ -65,8 +65,34 @@ const Capnhat_congty = ({
         message.success(`Đã cập nhật công ty: ${values.tenCongTy}`);
       })
       .catch((e) => {
-        message.error(e?.response?.data?.detail || "Lỗi");
+        Api.error(e);
       });
+  };
+  const handleDelete = () => {
+    Modal.confirm({
+      title: "Cảnh báo",
+      content:
+        "Việc xóa dữ liệu công ty sẽ bao gồm: Bài viết, Bài viết tuyển dụng của công ty này! Xác nhận để đồng ý xóa",
+      onOk: () => {
+        Api.delete(`/comp/${comp.id}/`, user?.access_token || "")
+          .then(() => {
+            message.success("Đã xóa!");
+            bulkDelete("CongTy", [comp.id]);
+            setInit((o: any) => ({
+              ...o,
+              companies: o?.companies?.filter(
+                (old: any) => old.id !== comp?.id
+              ),
+            }));
+          })
+          .catch((e) => {
+            Api.error(e);
+          });
+      },
+      okText: <div className="text-[red] font-medium">Xác nhận</div>,
+      cancelText: "Đóng",
+      maskClosable: true,
+    });
   };
   const handleCancel = () => {
     setShowModal(false);
@@ -159,7 +185,7 @@ const Capnhat_congty = ({
             style={{ marginTop: 24, textAlign: "right" }}
           >
             <Button
-              onClick={handleCancel}
+              onClick={handleDelete}
               className="mr-auto"
               color="danger"
               variant="solid"

@@ -63,6 +63,31 @@ export async function syncInit(access_token: string) {
   putMultiple("TuyenDung", tinResult?.results);
   return true;
 }
+export async function bulkDelete(storeName: StoreName, keys: any[]) {
+  if (!keys || keys.length === 0) {
+    console.warn(`bulkDelete: Mảng keys trống. Không cần thực hiện thao tác.`);
+    return;
+  }
+  try {
+    const store = (db as any)[storeName] as Table<any, any>; // Ép kiểu
+
+    if (!store || !("bulkDelete" in store)) {
+      throw new Error(`Store không hợp lệ hoặc không phải là Dexie Table.`);
+    }
+
+    // Chạy trong transaction để đảm bảo tính toàn vẹn và hiệu suất
+    await db.transaction("rw", [store], async () => {
+      await store.bulkDelete(keys);
+    });
+
+    console.log(
+      `Đã xóa thành công ${keys.length} bản ghi khỏi store: ${storeName}`
+    );
+  } catch (error) {
+    console.error(`Lỗi khi bulkDelete cho ${storeName}`, error);
+    throw error;
+  }
+}
 export async function putMultiple(storeName: StoreName, dataArray: any[]) {
   try {
     const store = db[storeName] as Table<any, any>;

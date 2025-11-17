@@ -71,7 +71,7 @@ button {
   }
 }
 .ant-modal {
-  margin: 8px auto !important;
+  margin: -50px auto 8px auto !important;
   max-width: calc(100vw - 48px) !important;
   .ant-modal-content {
     padding: 0px !important;
@@ -84,7 +84,11 @@ button {
       top: 4px;
     }
     .ant-modal-body {
+      position: relative;
       padding: 16px;
+      overflow: hidden;
+      max-height: calc(100vh - 210px);
+      overflow-y: auto;
     }
     .ant-modal-footer {
       @apply flex border-t border-[#0003];

@@ -3,7 +3,9 @@ import App_home from "../home";
 import Mobile_index from "../mobile";
 import { AuthProvider } from "../context/authContext";
 import NotFoundPage from "../mobile/notFound";
-import Quanlycongty_index from "../mobile/canhan/quanlycongty/index";
+import Quanlycongty_index from "../mobile/canhan/admin/quanlycongty/index";
+import DangbaiTuyendung_index from "../mobile/canhan/admin/dangbaituyendung";
+import Congtacvien_index from "../mobile/canhan/admin/congtacvien";
 
 const Router_all = () => {
   return (
@@ -14,6 +16,12 @@ const Router_all = () => {
           <Route path="mobile" element={<Mobile_index />}></Route>
           <Route path="mobile/:tab" element={<Mobile_index />}>
             <Route path="congty" element={<Quanlycongty_index />}></Route>
+            <Route
+              path="tuyendung"
+              element={<DangbaiTuyendung_index />}
+            ></Route>
+            <Route path="tintd" element={<DangbaiTuyendung_index />}></Route>
+            <Route path="congtv" element={<Congtacvien_index />}></Route>
           </Route>
           <Route path="*" element={<NotFoundPage />}></Route>
           <Route path="*" element={<NotFoundPage />}></Route>

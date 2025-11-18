@@ -4,6 +4,7 @@ import React, {
   useContext,
   useState,
   type ReactNode,
+  type SetStateAction,
 } from "react";
 import Api from "../components/api";
 import { message } from "antd";
@@ -39,6 +40,9 @@ interface ProfileType {
   updated_at: string;
   created_at: string;
 }
+interface ConfigType {
+  taskbar: boolean;
+}
 interface UserType {
   id: string;
   username: string;
@@ -50,9 +54,8 @@ interface AuthContextType {
   loading: boolean;
   init: { companies: any[]; ips: any[]; tags: any[] };
   setInit: any;
-  config: {
-    taskbar: boolean;
-  };
+  setConfig: (e: any) => SetStateAction<any>;
+  config: ConfigType;
   login: (
     username: string,
     password: string,
@@ -153,6 +156,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loading,
     config,
     login,
+    setConfig,
     logout,
     updateProfile,
     auto_login,

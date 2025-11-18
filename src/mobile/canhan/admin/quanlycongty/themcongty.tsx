@@ -11,10 +11,10 @@ import {
 import { UploadOutlined } from "@ant-design/icons";
 import React, { useState, type ReactNode } from "react";
 import type { UploadFile } from "antd/lib/upload/interface";
-import { useAuth } from "../../../context/authContext";
+import { useAuth } from "../../../../context/authContext";
 import { FaRegImage } from "react-icons/fa";
-import Api from "../../../components/api";
-import { putMultiple } from "../../../db/App_db";
+import Api from "../../../../components/api";
+import { putMultiple } from "../../../../db/App_db";
 
 // Định nghĩa kiểu dữ liệu cho dữ liệu công ty
 interface CompanyData {

@@ -7,6 +7,7 @@ import ChuaDangnhap from "../../components/auth/ChuaDangnhap";
 import { useAuth } from "../../context/authContext";
 import { TbBuildingCog } from "react-icons/tb";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import Admin_index from "./admin";
 
 const Canhan_index = () => {
   const nav = useNavigate();
@@ -35,56 +36,7 @@ const Canhan_index = () => {
               </div>
             </div>
           </div>
-          {user?.profile?.level === "admin" && (
-            <>
-              <Link
-                to="/mobile/canhan/congty"
-                className="flex text-[12px] gap-2 items-center bg-white shadow p-2 select-none"
-              >
-                <div className="flex min-w-10 w-10 h-10 items-center bg-[#2e3236] justify-center">
-                  <TbBuildingCog size={20} color="#fff" />
-                </div>
-                <div className="flex flex-col w-full relative">
-                  <div className="flex justify-between">
-                    <div className="text-[14px] font-medium">
-                      Quản lý công ty
-                    </div>
-                  </div>
-                  <div className="text-[12px]">
-                    Thêm sửa xóa danh sách công ty
-                  </div>
-                </div>
-              </Link>
-              <div className="flex text-[12px] gap-2 items-center bg-white shadow p-2 select-none">
-                <div className="flex min-w-10 w-10 h-10 items-center bg-[#2e3236] justify-center">
-                  <FaUsersLine size={20} color="#fff" />
-                </div>
-                <div className="flex flex-col w-full relative">
-                  <div className="flex justify-between">
-                    <div className="text-[14px] font-medium">
-                      Quản lý cộng tác viên
-                    </div>
-                  </div>
-                  <div className="text-[12px]">Thêm sửa xóa cộng tác viên</div>
-                </div>
-              </div>
-              <div className="flex text-[12px] gap-2 items-center bg-white shadow p-2 select-none">
-                <div className="flex min-w-10 w-10 h-10 items-center bg-[#2e3236] justify-center">
-                  <RiPagesFill size={20} color="#fff" />
-                </div>
-                <div className="flex flex-col w-full relative">
-                  <div className="flex justify-between">
-                    <div className="text-[14px] font-medium">
-                      Đăng tài tuyển dụng
-                    </div>
-                  </div>
-                  <div className="text-[12px]">
-                    Đăng bài tuyển dụng cho một công ty
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
+          {user?.profile?.level === "admin" && <Admin_index />}
           {user?.profile?.level === "normal" && (
             <>
               <div className="flex text-[12px] gap-2 items-center bg-white shadow p-2 select-none">
@@ -199,7 +151,7 @@ const Canhan_index = () => {
             </>
           )}
           <div
-            className="flex w-full justify-center p-2 mt-2 items-center bg-white shadow text-[red]"
+            className="flex w-full justify-center p-2 mt-6 items-center bg-white shadow text-[red]"
             onClick={() => {
               Modal.confirm({
                 title: "Cảnh báo",

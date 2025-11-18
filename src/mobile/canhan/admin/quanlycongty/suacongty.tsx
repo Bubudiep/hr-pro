@@ -2,9 +2,9 @@
 import { Modal, Form, Input, Select, Button, message } from "antd";
 import React, { useState, useEffect, type ReactNode } from "react";
 import { FaRegImage, FaTrash } from "react-icons/fa";
-import { useAuth } from "../../../context/authContext";
-import Api from "../../../components/api";
-import { bulkDelete, putMultiple } from "../../../db/App_db";
+import { useAuth } from "../../../../context/authContext";
+import Api from "../../../../components/api";
+import { bulkDelete, putMultiple } from "../../../../db/App_db";
 
 interface Company {
   id: number;

@@ -64,6 +64,7 @@ const Quanlycongty_index = () => {
           <div className="flex flex-col gap-2 overflow-hidden p-4 pt-2 flex-1">
             <div className="flex flex-col gap-2 overflow-y-auto h-full pb-22">
               {init?.companies
+                ?.filter((c) => c?.soft_delete !== true)
                 ?.sort((a, b) => b?.id - a?.id)
                 ?.map((comp) => (
                   <Capnhat_congty comp={comp} key={comp?.id}>

@@ -8,6 +8,7 @@ import { useAuth } from "../../context/authContext";
 import { TbBuildingCog } from "react-icons/tb";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import Admin_index from "./admin";
+import UpdateProfile from "./update_profile";
 
 const Canhan_index = () => {
   const nav = useNavigate();
@@ -17,25 +18,27 @@ const Canhan_index = () => {
       {user?.id ? (
         <div className="flex flex-col gap-1 relative">
           <Outlet />
-          <div className="flex bg-white shadow p-2 gap-2">
-            <div className="avatar w-20 h-20 bg-[#235fa3]"></div>
-            <div className="flex flex-col">
-              <div className="flex text-[#235fa3] text-[18px] font-medium">
-                {user?.profile?.name || "No name"}
-              </div>
-              <div className="text-[10px] text-[#444] font-medium">
-                @{user?.profile?.tag || "no.name"}
-              </div>
-              <div className="text-[10px] text-[#444] mb-0.5">
-                {user?.profile?.level_name}
-              </div>
-              <div className="flex">
-                <div className="text-[10px] bg-[#235fa3] text-white px-2 py-0.5 rounded">
-                  Đang tìm việc
+          <UpdateProfile>
+            <div className="flex bg-white shadow p-2 gap-2">
+              <div className="avatar w-20 h-20 bg-[#235fa3]"></div>
+              <div className="flex flex-col">
+                <div className="flex text-[#235fa3] text-[18px] font-medium">
+                  {user?.profile?.name || "No name"}
+                </div>
+                <div className="text-[10px] text-[#444] font-medium">
+                  @{user?.profile?.tag || "no.name"}
+                </div>
+                <div className="text-[10px] text-[#444] mb-0.5">
+                  {user?.profile?.level_name}
+                </div>
+                <div className="flex">
+                  <div className="text-[10px] bg-[#235fa3] text-white px-2 py-0.5 rounded">
+                    Đang tìm việc
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </UpdateProfile>
           {user?.profile?.level === "admin" && <Admin_index />}
           {user?.profile?.level === "normal" && (
             <>

@@ -3,6 +3,7 @@ import React, { useState, type ReactNode } from "react";
 import { useAuth } from "../../context/authContext";
 import { FaLocationDot } from "react-icons/fa6";
 import { HiBellAlert } from "react-icons/hi2";
+import { FaArrowRight } from "react-icons/fa";
 interface UntuyenType {
   children: ReactNode;
   className: string;
@@ -57,17 +58,20 @@ const Ungtuyen_form = ({ children, className, tin }: UntuyenType) => {
         <div className="-my-2">
           <div className="h-full">
             <div className="flex flex-col mb-3 gap-2">
-              <div className="company_card flex gap-2 p-2 rounded-lg shadow">
+              <div className="company_card flex gap-2 p-2 items-start rounded-lg shadow">
                 <div className="flex avatar w-12 min-w-12">
                   <img src={comp?.logo} className="object-cover" />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col w-full">
                   <div className="flex font-medium text-[15px]">
                     {comp?.name}
                   </div>
                   <div className="flex text-[#999] items-center gap-1">
                     <FaLocationDot />
                     {comp?.address}
+                  </div>
+                  <div className="flex justify-end items-center gap-1 text-[11px] text-[#999]">
+                    Xem công ty <FaArrowRight />
                   </div>
                 </div>
               </div>

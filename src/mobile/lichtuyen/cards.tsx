@@ -5,6 +5,7 @@ import { useAuth } from "../../context/authContext";
 import { FaLocationDot } from "react-icons/fa6";
 import { MdOutlineAttachMoney } from "react-icons/md";
 import Ungtuyen_form from "./ungtuyen";
+import CompanyCard from "../../components/CompanyCard";
 
 interface TinType {
   id: number;
@@ -22,7 +23,7 @@ const Lichtuyen_cards = ({ tin }: { tin: TinType }) => {
   const { init } = useAuth();
   const comp = init?.companies?.find((c) => c?.id === tin?.companies);
   return (
-    <div className="item" key={tin?.id}>
+    <div className="item relative" key={tin?.id}>
       {tin?.thuong && (
         <Tooltip
           title={
@@ -59,14 +60,18 @@ const Lichtuyen_cards = ({ tin }: { tin: TinType }) => {
         </Tooltip>
       )}
       <div className="flex gap-2">
-        <div className="avatar">
-          <img src={comp?.logo} />
-        </div>
+        <CompanyCard companyData={comp}>
+          <div className="avatar relative z-1">
+            <img src={comp?.logo} />
+          </div>
+        </CompanyCard>
         <div className="information">
           <div className="title">
             ({tin?.bophan}) {tin?.vitri}
           </div>
-          <div className="name">{comp?.name}</div>
+          <CompanyCard companyData={comp}>
+            <div className="name relative z-1">{comp?.name}</div>
+          </CompanyCard>
           <div className="address">
             <FaLocationDot size={10} className="mb-px" />
             {comp?.address || "Chưa rõ"}
@@ -89,6 +94,9 @@ const Lichtuyen_cards = ({ tin }: { tin: TinType }) => {
           Ứng tuyển
         </Ungtuyen_form>
       </div>
+      <Ungtuyen_form tin={tin} className="absolute w-full h-full">
+        <div className="mask" />
+      </Ungtuyen_form>
     </div>
   );
 };

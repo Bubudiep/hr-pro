@@ -35,6 +35,7 @@ interface ProfileType {
   name_display: string;
   phone: string;
   user: number;
+  cccd: string;
   timviec: boolean;
   verified: boolean;
   updated_at: string;

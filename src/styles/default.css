@@ -302,7 +302,7 @@ button {
         @apply text-[16px] font-medium mt-1;
       }
       .name {
-        @apply text-[13px] font-medium text-[#07f] mt-1;
+        @apply text-[13px] font-medium text-[#07f];
       }
       .address {
         @apply flex items-center gap-1 text-[12px] text-[#999] leading-3 mt-px;

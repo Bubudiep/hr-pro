@@ -1,6 +1,6 @@
 import { Button } from "antd";
 import React, { useEffect, useRef, useState } from "react";
-import { FaArrowLeft, FaPlus } from "react-icons/fa";
+import { FaArrowLeft, FaEdit, FaPlus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../../context/authContext";
 import Themmoi_congty from "./themcongty";
@@ -8,6 +8,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { RiMore2Fill } from "react-icons/ri";
 import { IoIosMore } from "react-icons/io";
 import Capnhat_congty from "./suacongty";
+import { MdOutlineEventNote } from "react-icons/md";
 
 const Quanlycongty_index = () => {
   const { user, setConfig, init } = useAuth();
@@ -67,32 +68,43 @@ const Quanlycongty_index = () => {
                 ?.filter((c) => c?.soft_delete !== true)
                 ?.sort((a, b) => b?.id - a?.id)
                 ?.map((comp) => (
-                  <Capnhat_congty comp={comp} key={comp?.id}>
-                    <div className="flex gap-4 relative border-b py-2 border-[#cacaca]">
-                      <div className="w-10 h-10">
-                        <img src={comp?.logo} />
+                  <div
+                    key={comp?.id}
+                    className="flex gap-4 relative border-b py-2 border-[#cacaca]"
+                  >
+                    <div className="w-10 h-10">
+                      <img src={comp?.logo} />
+                    </div>
+                    <div className="flex flex-col flex-1">
+                      <div className="flex w-full font-medium justify-between">
+                        <div className="flex">{comp?.name}</div>
                       </div>
-                      <div className="flex flex-col flex-1">
-                        <div className="flex w-full font-medium justify-between">
-                          <div className="flex">{comp?.name}</div>
-                          <div
-                            className="flex bg-[#125880] text-[white] text-[11px] rounded-md 
-                            items-center px-1 py-0.5 mt-auto"
-                          >
-                            {
-                              init?.ips?.find(
-                                (i) => i?.id === comp?.khucongnhiep
-                              )?.name
-                            }
-                          </div>
+                      <div className="flex">
+                        <div className="text-[11px] font-medium">
+                          {
+                            init?.ips?.find((i) => i?.id === comp?.khucongnhiep)
+                              ?.name
+                          }
                         </div>
-                        <div className="flex gap-1 flex-wrap items-center text-[12px] text-[#999]">
-                          <FaLocationDot />
-                          {comp?.address}
-                        </div>
+                      </div>
+                      <div className="flex gap-1 flex-wrap items-center text-[12px] text-[#999]">
+                        <FaLocationDot />
+                        {comp?.address}
                       </div>
                     </div>
-                  </Capnhat_congty>
+                    <div className="flex flex-col gap-1 justify-between items-center">
+                      <Capnhat_congty comp={comp}>
+                        <Button variant="outlined" size="small">
+                          <FaEdit />
+                        </Button>
+                      </Capnhat_congty>
+                      <Capnhat_congty comp={comp}>
+                        <Button variant="text" size="small">
+                          <MdOutlineEventNote />
+                        </Button>
+                      </Capnhat_congty>
+                    </div>
+                  </div>
                 ))}
             </div>
           </div>

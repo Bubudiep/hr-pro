@@ -121,7 +121,6 @@ const Capnhat_congty = ({
     <>
       <div onClick={() => setShowModal(true)}>{children}</div>
       <Modal
-        title={`Cập nhập thông tin công ty`}
         open={showModal}
         onCancel={handleCancel}
         footer={null}
@@ -132,6 +131,7 @@ const Capnhat_congty = ({
           name={`update_company_form_${comp.id}`}
           layout="vertical"
           onFinish={onFinish}
+          className="mt-2!"
           initialValues={{ logo: null }}
         >
           <Form.Item name="logo" valuePropName="file">
@@ -162,13 +162,6 @@ const Capnhat_congty = ({
             <Input placeholder="Ví dụ: Công ty TNHH A.B.C" />
           </Form.Item>
           <Form.Item
-            name="diaChi"
-            label="Địa Chỉ"
-            rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}
-          >
-            <Input.TextArea rows={2} placeholder="Địa chỉ..." />
-          </Form.Item>
-          <Form.Item
             name="loaiHinh"
             label="Khu Công Nghiệp"
             rules={[
@@ -179,6 +172,13 @@ const Capnhat_congty = ({
               placeholder="Chọn Khu Công Nghiệp..."
               options={selectOptions}
             />
+          </Form.Item>
+          <Form.Item
+            name="diaChi"
+            label="Địa Chỉ"
+            rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}
+          >
+            <Input.TextArea rows={2} placeholder="Địa chỉ..." />
           </Form.Item>
           <Form.Item
             className="btn"

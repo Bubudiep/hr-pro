@@ -35,7 +35,7 @@ const Admin_index = () => {
           <div className="text-[12px]">Thêm sửa xóa cộng tác viên</div>
         </div>
       </Link>
-      <Link
+      {/* <Link
         to="/mobile/canhan/tintd"
         className="flex text-[12px] gap-2 items-center bg-white shadow p-2 select-none"
       >
@@ -48,7 +48,7 @@ const Admin_index = () => {
           </div>
           <div className="text-[12px]">Đăng bài tuyển dụng cho một công ty</div>
         </div>
-      </Link>
+      </Link> */}
     </>
   );
 };

@@ -9,6 +9,7 @@ import { RiMore2Fill } from "react-icons/ri";
 import { IoIosMore } from "react-icons/io";
 import Capnhat_congty from "./suacongty";
 import { MdOutlineEventNote } from "react-icons/md";
+import Update_congty from "./updatecongty";
 
 const Quanlycongty_index = () => {
   const { user, setConfig, init } = useAuth();
@@ -87,9 +88,14 @@ const Quanlycongty_index = () => {
                           }
                         </div>
                       </div>
-                      <div className="flex gap-1 flex-wrap items-center text-[12px] text-[#999]">
-                        <FaLocationDot />
-                        {comp?.address}
+                      <div className="flex gap-1 flex-wrap items-center text-[11px] text-[#999]">
+                        {!comp?.hiring ? (
+                          <div className="text-[#1e7aaf] font-medium">
+                            Đang tuyển
+                          </div>
+                        ) : (
+                          <div className="text-[#999]">Không tuyển nữa</div>
+                        )}
                       </div>
                     </div>
                     <div className="flex flex-col gap-1 justify-between items-center">
@@ -98,11 +104,11 @@ const Quanlycongty_index = () => {
                           <FaEdit />
                         </Button>
                       </Capnhat_congty>
-                      <Capnhat_congty comp={comp}>
+                      <Update_congty comp={comp}>
                         <Button variant="text" size="small">
                           <MdOutlineEventNote />
                         </Button>
-                      </Capnhat_congty>
+                      </Update_congty>
                     </div>
                   </div>
                 ))}

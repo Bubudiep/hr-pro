@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { TbAlertSquareRoundedFilled } from "react-icons/tb";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import ChuaDangnhap from "../../components/auth/ChuaDangnhap";
 import { useAuth } from "../../context/authContext";
 
@@ -110,10 +110,18 @@ const CongIndex: React.FC = () => {
             Hôm nay bạn chưa chấm công!!!
           </div>
           <div className="flex items-center text-[13px]">
-            <div className="text-[#07f] flex-1 border-r border-[#0002] justify-center flex w-full p-2">
+            <div
+              onClick={() => message.warning("Bạn chưa đi làm")}
+              className="text-[#07f] flex-1 border-r border-[#0002] justify-center flex w-full p-2"
+            >
               Chấm công ngay
             </div>
-            <div className="flex flex-1 justify-center text-[#999]">Để sau</div>
+            <div
+              onClick={() => message.warning("Bạn chưa đi làm")}
+              className="flex flex-1 justify-center text-[#999]"
+            >
+              Để sau
+            </div>
           </div>
         </div>
         <div className="flex flex-col bg-white shadow rounded-xl overflow-hidden">

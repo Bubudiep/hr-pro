@@ -82,6 +82,8 @@ button {
     .ant-modal-close {
       right: 4px;
       top: 4px;
+      background-color: #fff;
+      border-radius: 100%;
     }
     .ant-modal-body {
       position: relative;
@@ -194,6 +196,24 @@ button {
     }
   }
 }
+.ant-upload-list-picture-card {
+  .ant-upload-select {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  .ant-upload-list-item-container {
+    width: 60px !important;
+    height: 60px !important;
+    .ant-upload-list-item {
+      padding: 0px !important;
+      overflow: hidden;
+      &::before {
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+  }
+}
 .fadeIn {
   animation: fadeIn 0.3s ease-out forwards;
   opacity: 0;
@@ -215,6 +235,16 @@ button {
 .fadeOutTop {
   animation: fadeOutTop 0.3s ease-out;
   opacity: 0;
+}
+.list_img {
+  .ant-image {
+    height: 100%;
+    width: 100%;
+    .ant-image-img {
+      height: 100%;
+      object-fit: cover;
+    }
+  }
 }
 @keyframes fadeIn {
   from {
@@ -290,12 +320,6 @@ button {
     .avatar {
       @apply min-w-12 w-12 h-12 overflow-hidden;
     }
-    .details {
-      @apply flex gap-1 mt-1;
-      .dt-item {
-        @apply text-[10px] p-0.5 px-1.5 rounded-sm text-[white] bg-[#55596d];
-      }
-    }
     .information {
       @apply flex flex-col gap-0.5;
       .title {
@@ -305,7 +329,7 @@ button {
         @apply text-[13px] font-medium text-[#07f];
       }
       .address {
-        @apply flex items-center gap-1 text-[12px] text-[#999] leading-3 mt-px;
+        @apply flex items-center gap-1 text-[10px] text-[#999];
       }
     }
   }

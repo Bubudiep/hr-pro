@@ -32,6 +32,10 @@ db.version(2).stores({
   TuyenDung:
     "++id,code,companies,chinhthuc,bophan,vitri,thuong,min_old,max_old,ngayketthuc,soluong,khucongnhiep,user,tuyengap,tags, updated_at, created_at",
 });
+db.version(2).stores({
+  TuyenDung:
+    "++id,code,companies,chinhthuc,soft_delete,bophan,vitri,thuong,min_old,max_old,ngayketthuc,soluong,khucongnhiep,user,tuyengap,tags, updated_at, created_at",
+});
 export async function syncInit(access_token: string) {
   const max_ips = await getMaxUpdatedAt("KhuCongNghiep");
   const max_tag = await getMaxUpdatedAt("TinTag");
@@ -91,14 +95,21 @@ export async function bulkDelete(storeName: StoreName, keys: any[]) {
 export async function putMultiple(storeName: StoreName, dataArray: any[]) {
   try {
     const store = db[storeName] as Table<any, any>;
+
     if (!store || !("bulkPut" in store)) {
       throw new Error(`Store không hợp lệ hoặc không phải là Dexie Table.`);
     }
-    const ids = await db.transaction("rw", [store], async () => {
+    // Thực hiện trong transaction để đảm bảo tính nhất quán
+    const updatedItems = await db.transaction("rw", [store], async () => {
+      // 1. bulkPut sẽ trả về một mảng các Primary Keys (IDs) của các item vừa được thêm/sửa
       const keys = await store.bulkPut(dataArray, { allKeys: true });
-      return keys;
+      // 2. Dùng bulkGet để lấy chi tiết data dựa trên danh sách keys vừa nhận được
+      // filter(Boolean) để loại bỏ các giá trị null/undefined nếu có lỗi hiếm gặp
+      const items = await store.bulkGet(keys);
+
+      return items.filter((item) => item !== undefined);
     });
-    return ids;
+    return updatedItems;
   } catch (error) {
     console.error(`Lỗi khi putMultiple`, error);
     throw error;
@@ -110,7 +121,9 @@ export async function getData(storeName: StoreName) {
     if (!store || !("toArray" in store)) {
       throw new Error(`Store không hợp lệ hoặc không phải là Dexie Table.`);
     }
-    const data = await store.toArray();
+    const data = await store
+      .filter((item) => (item?.soft_delete ? !item.soft_delete : true))
+      .toArray();
     return data;
   } catch (error) {
     throw error;

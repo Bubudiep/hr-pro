@@ -156,14 +156,12 @@ const Capnhat_congty = ({
           </Form.Item>
           <Form.Item
             name="tenCongTy"
-            label="Tên Công Ty"
             rules={[{ required: true, message: "Vui lòng nhập tên công ty!" }]}
           >
             <Input placeholder="Ví dụ: Công ty TNHH A.B.C" />
           </Form.Item>
           <Form.Item
             name="loaiHinh"
-            label="Khu Công Nghiệp"
             rules={[
               { required: true, message: "Vui lòng chọn Khu Công Nghiệp!" },
             ]}
@@ -175,10 +173,9 @@ const Capnhat_congty = ({
           </Form.Item>
           <Form.Item
             name="diaChi"
-            label="Địa Chỉ"
             rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}
           >
-            <Input.TextArea rows={2} placeholder="Địa chỉ..." />
+            <Input placeholder="Địa chỉ..." />
           </Form.Item>
           <Form.Item
             className="btn"
@@ -193,7 +190,7 @@ const Capnhat_congty = ({
             ></Button>
             <Button onClick={handleCancel}>Hủy</Button>
             <Button type="primary" htmlType="submit">
-              Lưu Thay Đổi
+              Lưu
             </Button>
           </Form.Item>
         </Form>

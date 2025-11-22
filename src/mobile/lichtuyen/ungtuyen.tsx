@@ -1,24 +1,14 @@
-import { message, Modal } from "antd";
+import { Image, message, Modal } from "antd";
 import React, { useState, type ReactNode } from "react";
 import { useAuth } from "../../context/authContext";
 import { FaLocationDot } from "react-icons/fa6";
 import { HiBellAlert } from "react-icons/hi2";
 import { FaArrowRight } from "react-icons/fa";
+import type { TinType } from "./cards";
 interface UntuyenType {
   children: ReactNode;
   className: string;
-  tin: {
-    id: number;
-    companies: number;
-    thuong: number;
-    dieukien_thuong: string;
-    mucluong: string;
-    min_old: number;
-    max_old: number;
-    bophan: string;
-    vitri: string;
-    chinhthuc: boolean;
-  };
+  tin: TinType;
 }
 const Ungtuyen_form = ({ children, className, tin }: UntuyenType) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,7 +36,6 @@ const Ungtuyen_form = ({ children, className, tin }: UntuyenType) => {
         {children}
       </div>
       <Modal
-        title="Đơn ứng tuyển"
         open={isModalOpen}
         onOk={handleSubmitApplication}
         onCancel={handleCloseModal}
@@ -58,77 +47,129 @@ const Ungtuyen_form = ({ children, className, tin }: UntuyenType) => {
         <div className="-my-2">
           <div className="h-full">
             <div className="flex flex-col mb-3 gap-2">
-              <div className="company_card flex gap-2 p-2 items-start rounded-lg shadow">
-                <div className="flex avatar w-12 min-w-12">
-                  <img src={comp?.logo} className="object-cover" />
+              <div className="flex flex-col text-[13px]">
+                <div className="flex w-full list_img">
+                  {tin?.images_details?.map((img) => (
+                    <div
+                      key={img.uid}
+                      className={`max-h-[140px] overflow-hidden rounded-md w-full object-cover flex-1 border border-[#eee] bg-[#eee]
+                  ${
+                    tin?.images_details?.length === 3
+                      ? "aspect-1/3"
+                      : tin?.images_details?.length === 2
+                      ? "aspect-3/2"
+                      : "aspect-5/3"
+                  }`}
+                    >
+                      <Image src={img.url} />
+                    </div>
+                  ))}
                 </div>
-                <div className="flex flex-col w-full">
+                <div className="flex justify-between">
+                  <b className="font-medium text-[18px]">{tin?.title}</b>
+                </div>
+                <div className="font-medium text-[14px] text-[#3d61af]">
+                  {tin?.mucluong || "Lương hấp dẫn"}
+                </div>
+                <div className="company_card flex gap-2 p-1 items-center rounded-lg shadow my-1">
+                  <div className="flex avatar w-8 min-w-8">
+                    <img src={comp?.logo} className="object-cover" />
+                  </div>
                   <div className="flex font-medium text-[15px]">
                     {comp?.name}
                   </div>
-                  <div className="flex text-[#999] items-center gap-1">
-                    <FaLocationDot />
-                    {comp?.address}
-                  </div>
-                  <div className="flex justify-end items-center gap-1 text-[11px] text-[#999]">
-                    Xem công ty <FaArrowRight />
-                  </div>
                 </div>
-              </div>
-              <div className="flex flex-col leading-4.5">
-                <div className="flex justify-between">
-                  Vị trí:
-                  <b className="font-medium text-[#666]">{tin?.vitri}</b>
-                </div>
-                <div className="flex justify-between">
-                  Bộ phận:
-                  <b className="font-medium text-[#666]">{tin?.bophan}</b>
-                </div>
-                <div className="flex justify-between">
-                  Loại hình:
-                  <b className="font-medium text-[#666]">
-                    {tin?.chinhthuc ? "Chính thức" : "Thời vụ"}
+                <div className="flex gap-1">
+                  <b className="bg-[#3d61af] font-medium text-[white] mt-1 p-0.5 rounded px-2 text-[11px]">
+                    {tin?.loaihinh === "tv" ? "Thời vụ" : "Chính thức"}
+                  </b>
+                  <b className="bg-[#65347c] font-medium text-[white] mt-1 p-0.5 rounded px-2 text-[11px]">
+                    {tin?.calamviec === "2ca"
+                      ? "Ca ngày/đêm"
+                      : tin?.calamviec === "3ca"
+                      ? "3 ca"
+                      : "Hành chính"}
                   </b>
                 </div>
-                <div className="flex font-medium justify-between mt-1">
-                  Thưởng nóng:
-                  <b className="text-[#fd5d00] text-[15px]">
-                    {tin?.thuong?.toLocaleString()}VNĐ
-                  </b>
-                </div>
-                <div className="flex font-medium mt-1 items-center gap-1 text-[#1a346d]">
-                  <HiBellAlert />
-                  Điều kiện thưởng:
-                </div>
-                <pre className="p-2 bg-[#e7ebf5] rounded-md mt-0.5">
-                  {tin?.dieukien_thuong}
-                </pre>
+                {tin?.luongcoban ? (
+                  <div className="flex gap-1 mt-1 justify-between">
+                    Lương cơ bản:
+                    <div className="flex text-[#0077ff] font-medium">
+                      {tin?.luongcoban?.toLocaleString()}VNĐ
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                {tin?.phucap ? (
+                  <div className="flex gap-1 mt-1 justify-between">
+                    Phụ cấp:
+                    <div className="flex text-[#0077ff] font-medium">
+                      {tin?.phucap?.toLocaleString()}VNĐ
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                {tin?.chuyencan ? (
+                  <div className="flex gap-1 mt-1 justify-between">
+                    Chuyên cần:
+                    <div className="flex text-[#0077ff] font-medium">
+                      {tin?.chuyencan?.toLocaleString()}VNĐ
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                {tin?.thuong && (
+                  <>
+                    <div className="flex font-medium justify-between mt-1">
+                      Thưởng nóng:
+                      <b className="text-[#fd5d00] text-[15px]">
+                        {tin?.thuong_sotien?.toLocaleString()}VNĐ
+                      </b>
+                    </div>
+                    <div className="flex font-medium mt-1 items-center gap-1 text-[#1a346d]">
+                      <HiBellAlert />
+                      Điều kiện thưởng:
+                    </div>
+                    <pre className="p-2 bg-[#e7ebf5] rounded-md mt-0.5">
+                      {tin?.thuong_dieukien || "- Không có điều kiện!"}
+                    </pre>
+                  </>
+                )}
               </div>
             </div>
-            <div className="flex border-b border-[#c9c9c9] mb-2" />
-            <div className="mb-1">
-              <label className="block text-gray-700 text-[13px] font-medium">
-                Họ và Tên:
-              </label>
-              <input
-                value={user?.profile?.name}
-                type="text"
-                placeholder="Nguyễn Văn A"
-                className="w-full p-1 px-1.5 border border-gray-300 rounded focus:outline-none 
-              focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="mb-2">
-              <label className="block text-gray-700 text-[13px] font-medium">
-                Điện thoại:
-              </label>
-              <input
-                value={user?.profile?.phone}
-                type="number"
-                placeholder="0984356252"
-                className="w-full p-1 px-1.5 border border-gray-300 rounded focus:outline-none 
-                focus:ring-2 focus:ring-blue-500"
-              />
+            <div className="border border-[#073264] rounded-md overflow-hidden">
+              <div className="flex bg-[#073264] text-white font-medium p-2">
+                Thông tin ứng tuyển
+              </div>
+              <div className="flex flex-col p-2">
+                <div className="mb-1">
+                  <label className="block text-gray-700 text-[13px] font-medium">
+                    Họ và Tên:
+                  </label>
+                  <input
+                    value={user?.profile?.name || ""}
+                    type="text"
+                    placeholder="Nguyễn Văn A"
+                    className="w-full p-1 px-1.5 border border-gray-300 rounded focus:outline-none 
+                  focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="mb-1">
+                  <label className="block text-gray-700 text-[13px] font-medium">
+                    Điện thoại:
+                  </label>
+                  <input
+                    value={user?.profile?.phone || ""}
+                    type="number"
+                    placeholder="0984356252"
+                    className="w-full p-1 px-1.5 border border-gray-300 rounded focus:outline-none 
+                    focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

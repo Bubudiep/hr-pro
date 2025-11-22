@@ -8,11 +8,15 @@ import { FaLocationDot } from "react-icons/fa6";
 import { RiMore2Fill } from "react-icons/ri";
 import { IoIosMore } from "react-icons/io";
 import Capnhat_congty from "./suacongty";
-import { MdOutlineEventNote } from "react-icons/md";
+import { MdOutlineEventNote, MdOutlineNewspaper } from "react-icons/md";
 import Update_congty from "./updatecongty";
+import Danhsach_tuyendung from "./tuyendungs";
+import { getData } from "../../../../db/App_db";
+import { TiLocation } from "react-icons/ti";
 
 const Quanlycongty_index = () => {
   const { user, setConfig, init } = useAuth();
+  const [tins, setTins] = useState<any[]>([]);
   const [animation, setAnimation] = useState({
     bg: "fadeIn",
     card: "fadeInTop",
@@ -23,7 +27,15 @@ const Quanlycongty_index = () => {
     setTimeout(() => nav("/mobile/canhan/"), 300);
     setTimeout(() => setConfig((o: any) => ({ ...o, taskbar: true })), 100);
   };
+  const handleTuyendungCallback = (e: any) => {
+    console.log(e);
+  };
   useEffect(() => {
+    const featchTins = async () => {
+      const allTin = await getData("TuyenDung");
+      setTins(allTin);
+    };
+    featchTins();
     setConfig((o: any) => ({ ...o, taskbar: false }));
     setAnimation({
       bg: "fadeIn",
@@ -68,50 +80,59 @@ const Quanlycongty_index = () => {
               {init?.companies
                 ?.filter((c) => c?.soft_delete !== true)
                 ?.sort((a, b) => b?.id - a?.id)
-                ?.map((comp) => (
-                  <div
-                    key={comp?.id}
-                    className="flex gap-4 relative border-b py-2 border-[#cacaca]"
-                  >
-                    <div className="w-10 h-10">
-                      <img src={comp?.logo} />
-                    </div>
-                    <div className="flex flex-col flex-1">
-                      <div className="flex w-full font-medium justify-between">
-                        <div className="flex">{comp?.name}</div>
+                ?.map((comp) => {
+                  const dangtuyen = tins?.filter(
+                    (tin) => tin?.companies === comp?.id && tin?.active === true
+                  );
+                  return (
+                    <div
+                      key={comp?.id}
+                      className="flex gap-4 relative border-b py-2 border-[#cacaca]"
+                    >
+                      <div className="w-10 h-10">
+                        <img src={comp?.logo} />
                       </div>
-                      <div className="flex">
-                        <div className="text-[11px] font-medium">
-                          {
-                            init?.ips?.find((i) => i?.id === comp?.khucongnhiep)
-                              ?.name
-                          }
+                      <div className="flex flex-col flex-1">
+                        <div className="flex w-full font-medium justify-between">
+                          <div className="flex">{comp?.name}</div>
+                        </div>
+                        <div className="flex">
+                          <div className="text-[11px] font-medium flex items-center gap-0.5">
+                            <TiLocation />
+                            {
+                              init?.ips?.find(
+                                (i) => i?.id === comp?.khucongnhiep
+                              )?.name
+                            }
+                          </div>
+                        </div>
+                        <div className="flex gap-1 flex-wrap items-center text-[11px] text-[#999]">
+                          {dangtuyen.length > 0 && (
+                            <div className="text-[#009ffc] flex items-center gap-1 mt-1 rounded font-medium">
+                              <MdOutlineNewspaper size={14} />{" "}
+                              {dangtuyen.length} tin tuyển dụng
+                            </div>
+                          )}
                         </div>
                       </div>
-                      <div className="flex gap-1 flex-wrap items-center text-[11px] text-[#999]">
-                        {!comp?.hiring ? (
-                          <div className="text-[#1e7aaf] font-medium">
-                            Đang tuyển
-                          </div>
-                        ) : (
-                          <div className="text-[#999]">Không tuyển nữa</div>
-                        )}
+                      <div className="flex flex-col gap-1 justify-between items-center">
+                        <Capnhat_congty comp={comp}>
+                          <Button variant="outlined" size="small">
+                            <FaEdit />
+                          </Button>
+                        </Capnhat_congty>
+                        <Danhsach_tuyendung
+                          comp={comp}
+                          callback={handleTuyendungCallback}
+                        >
+                          <Button variant="text" size="small">
+                            <MdOutlineEventNote />
+                          </Button>
+                        </Danhsach_tuyendung>
                       </div>
                     </div>
-                    <div className="flex flex-col gap-1 justify-between items-center">
-                      <Capnhat_congty comp={comp}>
-                        <Button variant="outlined" size="small">
-                          <FaEdit />
-                        </Button>
-                      </Capnhat_congty>
-                      <Update_congty comp={comp}>
-                        <Button variant="text" size="small">
-                          <MdOutlineEventNote />
-                        </Button>
-                      </Update_congty>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
             </div>
           </div>
         </div>

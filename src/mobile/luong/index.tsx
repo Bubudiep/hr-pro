@@ -16,7 +16,8 @@ const Luong_index = () => {
           Bảng lương
         </div>
       </div>
-      <div className="flex flex-col text-[13px] bg-white shadow p-2 gap-1">
+      <div className="flex p-8 justify-center text-[#999]">Bạn chưa đi làm</div>
+      {/* <div className="flex flex-col text-[13px] bg-white shadow p-2 gap-1">
         <div className="flex justify-between items-center">
           <div className="name text-[12px] font-medium">Tạm tính</div>
           <div className="flex gap-1 items-baseline text-[#ff5e00]">
@@ -80,7 +81,7 @@ const Luong_index = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> */}
     </div>
   ) : (
     <ChuaDangnhap />

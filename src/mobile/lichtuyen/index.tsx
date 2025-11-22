@@ -17,6 +17,7 @@ import {
 import { getData } from "../../db/App_db";
 import { useAuth } from "../../context/authContext";
 import Lichtuyen_cards from "./cards";
+import { useLocation } from "react-router-dom";
 
 const Lichtuyen_index = () => {
   const settings = {
@@ -33,6 +34,7 @@ const Lichtuyen_index = () => {
   const [listIP, setListIP] = useState<any[]>([]);
   const [tinTuyen, setTinTuyen] = useState<any[]>([]);
   const { init, loading } = useAuth();
+  const location = useLocation();
   useEffect(() => {
     if (!loading) {
       const fetchData = async () => {
@@ -44,7 +46,7 @@ const Lichtuyen_index = () => {
       console.log(init);
       fetchData();
     }
-  }, [loading]);
+  }, [loading, location]);
   return (
     <div className="flex flex-col max-w-screen overflow-y-auto pb-44">
       <div className="min-h-14 sticky top-0 z-10 bg-white shadow pl-2 flex items-center">
@@ -104,9 +106,13 @@ const Lichtuyen_index = () => {
           Phù hợp với bạn
         </div>
         <div className="lichtuyen flex mt-2">
-          {tinTuyen?.map((tin) => {
-            return <Lichtuyen_cards tin={tin} key={tin?.id} />;
-          })}
+          {tinTuyen
+            ?.filter(
+              (tin) => tin?.active === true && tin?.soft_delete === false
+            )
+            ?.map((tin) => {
+              return <Lichtuyen_cards tin={tin} key={tin?.id} />;
+            })}
         </div>
       </div>
     </div>

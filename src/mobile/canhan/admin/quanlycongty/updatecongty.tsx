@@ -18,7 +18,7 @@ import type { UploadFile, UploadProps } from "antd/es/upload/interface";
 import axios from "axios"; // Cần cài axios nếu chưa có
 import TextArea from "antd/es/input/TextArea";
 import Api from "../../../../components/api";
-import { putMultiple } from "../../../../db/App_db";
+import { getData, putMultiple } from "../../../../db/App_db";
 import { FaTrash } from "react-icons/fa";
 
 interface Update_congtyType {
@@ -70,10 +70,10 @@ const Update_congty = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [form] = Form.useForm();
+  const [tags, setTags] = useState<any[]>([]);
   const { user } = useAuth(); // Lấy token nếu cần thiết từ user hoặc auth context
-  const openModal = () => {
+  const openModal = async () => {
     setShowModal(true);
-    console.log(tin);
     if (tin) {
       setFileList(tin?.images_details || []);
       form.setFieldsValue({
@@ -101,6 +101,8 @@ const Update_congty = ({
         tienkhac: tin?.tienkhac,
       });
     }
+    const qs_tag = await getData("TinTag");
+    setTags(qs_tag);
   };
   const closeModal = () => setShowModal(false);
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
@@ -312,6 +314,17 @@ const Update_congty = ({
               </Form.Item>
             </div>
           )}
+          <Form.Item name="tags" className="mb-2!">
+            <Select
+              placeholder="Thêm tags"
+              allowClear
+              mode="multiple"
+              options={tags.map((item) => ({
+                value: item?.id,
+                label: item?.name,
+              }))}
+            ></Select>
+          </Form.Item>
           <Form.Item name="loaihinh" className="mb-2!">
             <Select placeholder="Thời vụ hoặc chính thức">
               <Select.Option value="tv">Thời vụ</Select.Option>

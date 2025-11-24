@@ -17,7 +17,6 @@ interface CompanyCardProps {
 }
 const CompanyCard = ({ children, companyData }: CompanyCardProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  console.log(companyData);
   const showModal = () => {
     setIsModalVisible(true);
   };

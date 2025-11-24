@@ -38,6 +38,7 @@ interface ProfileType {
   cccd: string;
   timviec: boolean;
   verified: boolean;
+  invent_code: string;
   updated_at: string;
   created_at: string;
 }
@@ -55,6 +56,7 @@ interface AuthContextType {
   loading: boolean;
   init: { companies: any[]; ips: any[]; tags: any[] };
   setInit: any;
+  setUser: (e: any) => SetStateAction<any>;
   setConfig: (e: any) => SetStateAction<any>;
   config: ConfigType;
   login: (
@@ -161,6 +163,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     updateProfile,
     auto_login,
+    setUser,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

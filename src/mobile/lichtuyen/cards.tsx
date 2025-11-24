@@ -8,9 +8,11 @@ import Ungtuyen_form from "./ungtuyen";
 import CompanyCard from "../../components/CompanyCard";
 import { IoIosAlarm } from "react-icons/io";
 import { GiDoorHandle } from "react-icons/gi";
+import { Link, useParams } from "react-router-dom";
 
 export interface TinType {
   id: number;
+  code: string;
   companies: number;
   thuong: boolean;
   thuong_sotien: number;
@@ -155,13 +157,19 @@ const Lichtuyen_cards = ({ tin }: { tin: TinType }) => {
           <MdOutlineAttachMoney size={15} />
         </div>
         {tin?.mucluong || "Liên hệ"}
-        <Ungtuyen_form tin={tin} className="btn ungtuyen">
+        <Link
+          to={`/mobile/lichtuyen/tin/${tin?.code}`}
+          className="btn ungtuyen"
+        >
           Ứng tuyển
-        </Ungtuyen_form>
+        </Link>
       </div>
-      <Ungtuyen_form tin={tin} className="absolute w-full h-full">
+      <Link
+        to={`/mobile/lichtuyen/tin/${tin?.code}`}
+        className="absolute w-full h-full"
+      >
         <div className="mask" />
-      </Ungtuyen_form>
+      </Link>
     </div>
   );
 };

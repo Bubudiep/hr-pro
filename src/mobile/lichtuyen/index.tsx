@@ -17,7 +17,7 @@ import {
 import { getData } from "../../db/App_db";
 import { useAuth } from "../../context/authContext";
 import Lichtuyen_cards from "./cards";
-import { useLocation } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 
 const Lichtuyen_index = () => {
   const settings = {
@@ -43,79 +43,80 @@ const Lichtuyen_index = () => {
         setListIP(qs_ip);
         setTinTuyen(qs_tin);
       };
-      console.log(init);
       fetchData();
     }
   }, [loading, location]);
   return (
-    <div className="flex flex-col max-w-screen overflow-y-auto pb-44">
-      <div className="min-h-14 sticky top-0 z-10 bg-white shadow pl-2 flex items-center">
-        <label className="flex gap-1 w-full">
-          <div className="text-gray-600 p-2">
-            <LuSearch />
-          </div>
-          <input
-            className="outline-0 w-full"
-            placeholder="Tìm công ty hoặc công việc...."
-          />
-        </label>
-        <div className="min-w-[58px] relative text-[#999] h-full flex items-center justify-center">
-          <BiSolidBell size={24} />
-          <div
-            className="flex absolute bottom-1.5 right-2 rounded-full w-5.5 h-5.5 bg-[#07f]
+    <>
+      <div className="flex flex-col max-w-screen overflow-y-auto pb-44">
+        <div className="min-h-14 sticky top-0 z-10 bg-white shadow pl-2 flex items-center">
+          <label className="flex gap-1 w-full">
+            <div className="text-gray-600 p-2">
+              <LuSearch />
+            </div>
+            <input
+              className="outline-0 w-full"
+              placeholder="Tìm công ty hoặc công việc...."
+            />
+          </label>
+          <div className="min-w-[58px] relative text-[#999] h-full flex items-center justify-center">
+            <BiSolidBell size={24} />
+            <div
+              className="flex absolute bottom-1.5 right-2 rounded-full w-5.5 h-5.5 bg-[#07f]
             text-[11px] font-medium items-center justify-center text-white border 
             shadow border-white"
-          >
-            9+
-          </div>
-        </div>
-      </div>
-      <div className="p-4">
-        <Slider className="mb-8" {...settings}>
-          <div className="aspect-2/1 flex! items-center justify-center text-3xl">
-            Slide 1
-          </div>
-          <div className="aspect-2/1 flex! items-center justify-center text-3xl">
-            Slide 2
-          </div>
-          <div className="aspect-2/1 flex! items-center justify-center text-3xl">
-            Slide 3
-          </div>
-        </Slider>
-      </div>
-      <div className="flex flex-col px-4">
-        <div className="filter flex gap-2 overflow-x-auto mb-2 snap-x px-0">
-          <div
-            className={`item ${activeTab === "all" ? "active" : ""}`}
-            onClick={() => setActiveTab("all")}
-          >
-            Tất cả
-          </div>
-          {listIP?.map((ip) => (
-            <div
-              key={ip?.id}
-              className={`item ${activeTab === ip?.name ? "active" : ""}`}
-              onClick={() => setActiveTab(ip?.name)}
             >
-              {ip?.name}
+              9+
             </div>
-          ))}
+          </div>
         </div>
-        <div className="font-medium flex items-center gap-1">
-          <BsBookmarkHeartFill size={16} />
-          Phù hợp với bạn
+        <div className="p-4">
+          <Slider className="mb-8" {...settings}>
+            <div className="aspect-2/1 flex! items-center justify-center text-3xl">
+              Slide 1
+            </div>
+            <div className="aspect-2/1 flex! items-center justify-center text-3xl">
+              Slide 2
+            </div>
+            <div className="aspect-2/1 flex! items-center justify-center text-3xl">
+              Slide 3
+            </div>
+          </Slider>
         </div>
-        <div className="lichtuyen flex mt-2">
-          {tinTuyen
-            ?.filter(
-              (tin) => tin?.active === true && tin?.soft_delete === false
-            )
-            ?.map((tin) => {
-              return <Lichtuyen_cards tin={tin} key={tin?.id} />;
-            })}
+        <div className="flex flex-col px-4">
+          <div className="filter flex gap-2 overflow-x-auto mb-2 snap-x px-0">
+            <div
+              className={`item ${activeTab === "all" ? "active" : ""}`}
+              onClick={() => setActiveTab("all")}
+            >
+              Tất cả
+            </div>
+            {listIP?.map((ip) => (
+              <div
+                key={ip?.id}
+                className={`item ${activeTab === ip?.name ? "active" : ""}`}
+                onClick={() => setActiveTab(ip?.name)}
+              >
+                {ip?.name}
+              </div>
+            ))}
+          </div>
+          <div className="font-medium flex items-center gap-1">
+            <BsBookmarkHeartFill size={16} />
+            Phù hợp với bạn
+          </div>
+          <div className="lichtuyen flex mt-2">
+            {tinTuyen
+              ?.filter(
+                (tin) => tin?.active === true && tin?.soft_delete === false
+              )
+              ?.map((tin) => {
+                return <Lichtuyen_cards tin={tin} key={tin?.id} />;
+              })}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

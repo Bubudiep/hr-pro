@@ -1,6 +1,7 @@
 import React, { type ReactNode, useState } from "react";
-import { Modal, Form, Input, Button } from "antd"; // Import từ Ant Design
+import { Modal, Form, Input, Button, message } from "antd"; // Import từ Ant Design
 import { useAuth } from "../../context/authContext";
+import Api from "../../components/api";
 
 interface UpdateProfileType {
   children: ReactNode;
@@ -8,27 +9,45 @@ interface UpdateProfileType {
 
 const UpdateProfile = ({ children }: UpdateProfileType) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const [form] = Form.useForm();
-  const { user, updateProfile } = useAuth();
+  const { user, setUser, updateProfile } = useAuth();
   const showModal = () => {
     setIsModalVisible(true);
   };
-  const onFinish = (values: any) => {
-    console.log("Dữ liệu cập nhật:", values);
-    setIsModalVisible(false);
+  const handleSave = async () => {
+    const values = await form.getFieldsValue();
+    setConfirmLoading(true);
+    console.log("Update", values);
+    Api.patch(`profile/${user?.profile?.id}/`, values, user?.access_token || "")
+      .then((res) => {
+        message.success("Thành công!");
+        setIsModalVisible(false);
+        setUser((o: any) =>
+          o
+            ? {
+                ...(o || {}),
+                profile: res,
+              }
+            : undefined
+        );
+      })
+      .catch((e) => Api.error(e))
+      .finally(() => setConfirmLoading(false));
   };
   const handleCancel = () => {
     setIsModalVisible(false);
     form.resetFields();
   };
-
   return (
     <>
       <div onClick={showModal}>{children}</div>
       <Modal
-        title="Cập nhập hồ sơ"
+        title="Hồ sơ"
+        onOk={handleSave}
         open={isModalVisible}
         onCancel={handleCancel}
+        confirmLoading={confirmLoading}
         okText="Lưu"
         cancelText="Đóng"
       >
@@ -36,24 +55,23 @@ const UpdateProfile = ({ children }: UpdateProfileType) => {
           form={form}
           name="update-profile-form"
           initialValues={{
-            username: user?.profile?.name,
+            name: user?.profile?.name,
             name_display: user?.profile?.name_display,
             phone: user?.profile?.phone,
             cccd: user?.profile?.cccd,
           }}
-          onFinish={onFinish}
           className="-my-2!"
           layout="vertical"
         >
           <Form.Item
-            name="username"
+            name="name"
             label="Tên đầy đủ"
             rules={[
               { required: true, message: "Vui lòng nhập tên người dùng!" },
             ]}
             className="mb-1!"
           >
-            <Input placeholder="tên nộp hồ sơ..." />
+            <Input placeholder="tên hồ sơ..." />
           </Form.Item>
           <Form.Item name="name_display" label="Tên hiển thị" className="mb-1!">
             <Input placeholder="tên hiển thị..." />
@@ -61,7 +79,7 @@ const UpdateProfile = ({ children }: UpdateProfileType) => {
           <Form.Item name="phone" label="Số Điện Thoại" className="mb-1!">
             <Input placeholder="điện thoại liên hệ..." />
           </Form.Item>
-          <Form.Item name="cccd" label="Số định danh cá nhân" className="mb-1!">
+          <Form.Item name="cccd" label="Số CCCD/ĐDCN" className="mb-1!">
             <Input placeholder="để xác minh lúc phỏng vấn..." />
           </Form.Item>
         </Form>

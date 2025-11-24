@@ -245,6 +245,14 @@ button {
       object-fit: cover;
     }
   }
+  .item {
+    &:first-child {
+      @apply rounded-l-md;
+    }
+    &:last-child {
+      @apply rounded-r-md;
+    }
+  }
 }
 @keyframes fadeIn {
   from {

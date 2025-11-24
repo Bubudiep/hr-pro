@@ -9,6 +9,7 @@ import { BiSolidGift } from "react-icons/bi";
 import ShareModal from "../../components/ShareComponent";
 import { IoGift } from "react-icons/io5";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import Api from "../../components/api";
 interface UntuyenType {
   children: ReactNode;
   className: string;
@@ -42,12 +43,24 @@ const Ungtuyen_form = ({
     nav(`/mobile/lichtuyen/`);
   };
   const handleSubmitApplication = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsModalOpen(false); // Đóng modal sau khi hoàn tất
-      message.success("Đã gửi đơn ứng tuyển thành công!"); // Thông báo thành công từ antd
-    }, 2000); // Giả lập 2 giây gửi
+    if (ttungtuyen?.name && ttungtuyen?.phone) {
+      setIsLoading(true);
+      Api.post(`tin/${tin?.id}/ungtuyen/`, ttungtuyen, user?.access_token || "")
+        .then((res) => {
+          console.log(res);
+          Modal.confirm({
+            title: "Thành công!",
+            content: "Ứng tuyển thành công, chúng tôi sẽ sớm liên hệ đến bạn!",
+            okText: "Đã hiểu",
+            cancelText: "Đóng",
+            maskClosable: true,
+          });
+        })
+        .catch((e) => Api.error(e))
+        .finally(() => setIsLoading(false));
+    } else {
+      message.error("Chưa nhập đủ thông tin!!");
+    }
   };
   useEffect(() => {
     if (isModalOpen && !params?.tin) {
@@ -94,7 +107,8 @@ const Ungtuyen_form = ({
                   {tin?.images_details?.map((img) => (
                     <div
                       key={img.uid}
-                      className={`max-h-[140px] overflow-hidden rounded-md w-full object-cover flex-1 border border-[#eee] bg-[#eee]
+                      className={`max-h-[140px] h-[140px] item overflow-hidden w-full object-cover 
+                        flex-1 border border-[#eee] bg-[#eee]
                       ${
                         tin?.images_details?.length === 3
                           ? "aspect-1/3"
@@ -296,7 +310,7 @@ const Ungtuyen_form = ({
               <div className="flex flex-col p-2">
                 <div className="mb-1 flex justify-between items-center">
                   <label className="block text-gray-700 text-[13px] w-40 font-medium">
-                    Họ và Tên:
+                    <b className="text-red-500 pr-1">*</b>Họ và Tên:
                   </label>
                   <input
                     value={ttungtuyen.name || ""}
@@ -311,13 +325,15 @@ const Ungtuyen_form = ({
                 </div>
                 <div className="mb-1 flex justify-between items-center">
                   <label className="block text-gray-700 text-[13px] w-40 font-medium">
-                    Điện thoại:
+                    <b className="text-red-500 pr-1">*</b>Điện thoại:
                   </label>
                   <input
                     value={ttungtuyen.phone || ""}
                     onChange={(e) =>
                       setTTungtuyen((o) => ({ ...o, phone: e?.target?.value }))
                     }
+                    minLength={10}
+                    maxLength={10}
                     type="text"
                     placeholder="0984356XXX"
                     className="w-full p-1 px-1.5 border border-gray-300 rounded focus:outline-none 
@@ -336,10 +352,11 @@ const Ungtuyen_form = ({
                         invent_code: e?.target?.value,
                       }))
                     }
+                    disabled={invent_code == ttungtuyen.invent_code}
                     type="text"
                     placeholder="HR-XXXXX"
                     className="w-full p-1 px-1.5 border border-gray-300 rounded focus:outline-none 
-                    focus:ring-2 focus:ring-blue-500"
+                    focus:ring-2 focus:ring-blue-500 disabled:bg-[#0001] disabled:text-[#aaaaaa]"
                   />
                 </div>
               </div>

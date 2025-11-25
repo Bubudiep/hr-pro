@@ -47,7 +47,7 @@ const Quanlycongty_index = () => {
   }, []);
   return (
     <div
-      className={`flex absolute overflow-hidden flex-col top-0 left-0 w-screen z-100 h-screen`}
+      className={`flex fixed overflow-hidden flex-col top-0 left-[400vw] w-screen z-100 h-screen`}
     >
       <div
         onClick={handleClose}

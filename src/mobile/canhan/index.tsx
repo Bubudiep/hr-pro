@@ -17,7 +17,6 @@ const Canhan_index = () => {
     <>
       {user?.id ? (
         <div className="flex flex-col gap-1 relative">
-          <Outlet />
           <UpdateProfile>
             <div className="flex bg-white shadow p-2 gap-2">
               <div className="avatar w-20 h-20 bg-[#235fa3]"></div>

@@ -5,7 +5,7 @@ import BottomTaskbar from "./taskbar";
 import Lichtuyen_index from "./lichtuyen";
 import Cong_index from "./cong";
 import Canhan_index from "./canhan";
-import { useNavigate, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { Spin } from "antd";
 import Api from "../components/api";
@@ -71,6 +71,7 @@ const Mobile_index = () => {
             transition: "all 0.3s ease-in-out",
           }}
         >
+          <Outlet />
           <Cong_index />
           <Luong_index />
           <News_index />

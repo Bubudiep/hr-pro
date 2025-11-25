@@ -17,11 +17,14 @@ export interface TinType {
   thuong: boolean;
   thuong_sotien: number;
   thuong_dieukien: string;
+  share_count: number;
   mucluong: string;
   min_old: number;
   max_old: number;
+  apply_count: number;
   title: string;
   loaihinh: string;
+  noidungbosung: string;
   urgent: boolean;
   luongcoban: number;
   phucap: number;
@@ -32,9 +35,13 @@ export interface TinType {
   cuatu: boolean;
   luongtuan: boolean;
   active: boolean;
+  view_count: number;
+  likes: any[];
+  shares: any[];
 }
 const Lichtuyen_cards = ({ tin }: { tin: TinType }) => {
   const { init } = useAuth();
+  const params = useParams();
   const comp = init?.companies?.find((c) => c?.id === tin?.companies);
   return (
     <div className="item relative" key={tin?.id}>

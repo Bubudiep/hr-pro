@@ -35,7 +35,7 @@ const Congtacvien_index = () => {
   }, []);
   return user?.profile?.level === "admin" ? (
     <div
-      className={`flex absolute overflow-hidden flex-col top-0 left-0 w-screen z-100 h-screen`}
+      className={`flex absolute left-[400vw] overflow-hidden flex-col top-0 w-screen z-100 h-screen`}
     >
       <div
         onClick={handleClose}

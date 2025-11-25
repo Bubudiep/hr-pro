@@ -17,7 +17,6 @@ const Router_all = () => {
           <Route path="mobile" element={<Mobile_index />}></Route>
           <Route path="mobile/:tab" element={<Mobile_index />}>
             <Route path="congty" element={<Quanlycongty_index />}></Route>
-            <Route path="tin" element={<Tintuyen_index />}></Route>
             <Route path="tin/:tin" element={<Tintuyen_index />}></Route>
             <Route
               path="tuyendung"

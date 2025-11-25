@@ -35,6 +35,7 @@ const Lichtuyen_index = () => {
   const [tinTuyen, setTinTuyen] = useState<any[]>([]);
   const { init, loading } = useAuth();
   const location = useLocation();
+  const params = useParams();
   useEffect(() => {
     if (!loading) {
       const fetchData = async () => {
@@ -59,7 +60,7 @@ const Lichtuyen_index = () => {
               placeholder="Tìm công ty hoặc công việc...."
             />
           </label>
-          <div className="min-w-[58px] relative text-[#999] h-full flex items-center justify-center">
+          {/* <div className="min-w-[58px] relative text-[#999] h-full flex items-center justify-center">
             <BiSolidBell size={24} />
             <div
               className="flex absolute bottom-1.5 right-2 rounded-full w-5.5 h-5.5 bg-[#07f]
@@ -68,7 +69,7 @@ const Lichtuyen_index = () => {
             >
               9+
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="p-4">
           <Slider className="mb-8" {...settings}>

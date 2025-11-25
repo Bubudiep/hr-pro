@@ -6,6 +6,9 @@ import {
   MessageFilled,
   CheckCircleOutlined,
 } from "@ant-design/icons";
+import Api from "./api";
+import type { TinType } from "../mobile/lichtuyen/cards";
+import { putMultiple } from "../db/App_db";
 
 // Icon Zalo (SVG thuần)
 const ZaloIcon = ({ className }: { className?: string }) => (
@@ -19,9 +22,11 @@ interface ShareModalProps {
   shareComponent: React.ReactNode;
   url?: string;
   title?: string;
+  tin?: TinType;
 }
 
 const ShareModal: React.FC<ShareModalProps> = ({
+  tin,
   shareComponent,
   children,
   url = typeof window !== "undefined" ? window.location.href : "",
@@ -30,6 +35,9 @@ const ShareModal: React.FC<ShareModalProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleCopy = async () => {
     try {
+      Api.post(`tin/${tin?.id}/share/`, {}).then((res) =>
+        putMultiple("TuyenDung", [res])
+      );
       await navigator.clipboard.writeText(url);
       message.success({
         content: "Đã copy link vào bộ nhớ tạm!",

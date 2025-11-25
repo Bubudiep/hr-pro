@@ -11,11 +11,12 @@ const Tintuyen_index = () => {
   const [tin, setTin] = useState<any>({});
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    console.log("Readed");
     setLoading(true);
     if (params?.tin) {
-      Api.get(`/tin/?code=${params?.tin}`, user?.access_token || "")
+      Api.get(`/tin/${params?.tin}/`, user?.access_token || "")
         .then((res) => {
-          if (res?.results?.[0]) setTin(res?.results?.[0]);
+          if (res) setTin(res);
         })
         .catch((e) => Api.error(e))
         .finally(() => setLoading(false));

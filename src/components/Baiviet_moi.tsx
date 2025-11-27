@@ -29,7 +29,7 @@ const Baiviet_moi = ({
   setShowModal: Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const MAX_IMAGES = 3;
-  const MAX_FILE_SIZE_BYTES = 200 * 1024;
+  const MAX_FILE_SIZE_BYTES = 5000 * 1024;
   const [content, setContent] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
   const [loading, setLoading] = useState<boolean>(false);

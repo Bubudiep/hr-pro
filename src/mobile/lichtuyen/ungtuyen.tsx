@@ -144,15 +144,6 @@ const Ungtuyen_form = ({
             <div className="font-medium text-[13px] text-[#3d61af] mb-1">
               {tin?.mucluong || "Lương hấp dẫn"}
             </div>
-            {tin?.hotline && (
-              <a
-                href={`tel:${tin?.hotline}`}
-                className="text-blue-600 border overflow-hidden border-blue-600 rounded-lg flex gap-1 items-center mt-2 font-medium text-lg transition-colors"
-              >
-                <div className="p-1 bg-[#07f] text-white px-3 mr-2">Tư vấn</div>
-                <FaPhone /> {tin?.hotline}
-              </a>
-            )}
             <div className="flex border-b border-[#0001] mb-1.5" />
             <div className="flex justify-end gap-1 mb-2">
               <Tooltip
@@ -548,6 +539,20 @@ const Ungtuyen_form = ({
                 />
               </div>
             </div>
+          </div>
+          <div className="sticky bottom-0 w-full left-0 px-2">
+            {tin?.hotline && (
+              <a
+                href={`tel:${tin?.hotline}`}
+                className="text-blue-600 animate-bounce border overflow-hidden border-blue-600 rounded-lg flex gap-1 
+                items-center mt-2 font-medium text-lg transition-colors"
+              >
+                <div className="p-1 bg-[#07f] text-white px-3 mr-2">Tư vấn</div>
+                <div className="flex flex-1 bg-white h-full p-1 items-center gap-1">
+                  <FaPhone className="mr-1" /> {tin?.hotline}
+                </div>
+              </a>
+            )}
           </div>
         </div>
       </Modal>

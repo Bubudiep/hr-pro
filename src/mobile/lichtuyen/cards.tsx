@@ -38,8 +38,12 @@ export interface TinType {
   view_count: number;
   likes: any[];
   shares: any[];
+  hotline: string;
 }
-const Lichtuyen_cards = ({ tin }: { tin: TinType }) => {
+interface Iptype {
+  name: string;
+}
+const Lichtuyen_cards = ({ tin, ip }: { tin: TinType; ip: Iptype }) => {
   const { init } = useAuth();
   const params = useParams();
   const comp = init?.companies?.find((c) => c?.id === tin?.companies);
@@ -107,8 +111,11 @@ const Lichtuyen_cards = ({ tin }: { tin: TinType }) => {
             </CompanyCard>
           </div>
           <div className="address">
+            <div className="flex px-1 bg-[#3658b6] font-medium rounded text-[white]">
+              {ip?.name || ""}
+            </div>
             <FaLocationDot />
-            {comp?.address || "Chưa rõ"}
+            <div className="flex text-[#474747]">{comp?.address || ""}</div>
           </div>
         </div>
       </div>

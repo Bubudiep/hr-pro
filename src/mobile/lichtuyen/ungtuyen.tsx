@@ -3,12 +3,17 @@ import React, { useEffect, useState, type ReactNode } from "react";
 import { useAuth } from "../../context/authContext";
 import { FaCircleCheck, FaLocationDot } from "react-icons/fa6";
 import { HiBellAlert, HiMiniCheckBadge } from "react-icons/hi2";
-import { FaArrowRight, FaCheck, FaEye, FaShare } from "react-icons/fa";
+import { FaArrowRight, FaCheck, FaEye, FaPhone, FaShare } from "react-icons/fa";
 import type { TinType } from "./cards";
 import { BiSolidGift } from "react-icons/bi";
 import ShareModal from "../../components/ShareComponent";
 import { IoGift } from "react-icons/io5";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import Api from "../../components/api";
 import { IoMdHeart } from "react-icons/io";
 import { MdOutlineSendTimeExtension } from "react-icons/md";
@@ -51,7 +56,25 @@ const Ungtuyen_form = ({
         .then((res) => {
           Modal.confirm({
             title: "Thành công!",
-            content: "Ứng tuyển thành công, chúng tôi sẽ sớm liên hệ đến bạn!",
+            content: (
+              <div className="flex flex-col">
+                <div className="flex">
+                  Ứng tuyển thành công, chúng tôi sẽ sớm liên hệ đến bạn! Hoặc
+                  bạn có thể gọi cho chúng tôi
+                </div>
+                <div className="flex">
+                  {tin?.hotline && (
+                    <a
+                      href={`tel:${tin?.hotline}`}
+                      className="text-blue-600 border border-blue-600 p-1 px-2 rounded-lg flex gap-1 items-center mt-2 font-bold text-lg hover:text-blue-800 transition-colors"
+                    >
+                      <FaPhone />
+                      {tin?.hotline}
+                    </a>
+                  )}
+                </div>
+              </div>
+            ),
             okText: "Đã hiểu",
             onOk: handleCloseModal,
             cancelText: "Đóng",
@@ -121,6 +144,15 @@ const Ungtuyen_form = ({
             <div className="font-medium text-[13px] text-[#3d61af] mb-1">
               {tin?.mucluong || "Lương hấp dẫn"}
             </div>
+            {tin?.hotline && (
+              <a
+                href={`tel:${tin?.hotline}`}
+                className="text-blue-600 border overflow-hidden border-blue-600 rounded-lg flex gap-1 items-center mt-2 font-medium text-lg transition-colors"
+              >
+                <div className="p-1 bg-[#07f] text-white px-3 mr-2">Tư vấn</div>
+                <FaPhone /> {tin?.hotline}
+              </a>
+            )}
             <div className="flex border-b border-[#0001] mb-1.5" />
             <div className="flex justify-end gap-1 mb-2">
               <Tooltip

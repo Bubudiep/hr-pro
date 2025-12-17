@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../../context/authContext";
 import Themmoi_congty from "./themcongty";
 import { FaLocationDot } from "react-icons/fa6";
-import { RiMore2Fill } from "react-icons/ri";
+import { RiImageCircleLine, RiMore2Fill } from "react-icons/ri";
 import { IoIosMore } from "react-icons/io";
 import Capnhat_congty from "./suacongty";
 import { MdOutlineEventNote, MdOutlineNewspaper } from "react-icons/md";
@@ -13,6 +13,7 @@ import Update_congty from "./updatecongty";
 import Danhsach_tuyendung from "./tuyendungs";
 import { getData } from "../../../../db/App_db";
 import { TiLocation } from "react-icons/ti";
+import { BsImage } from "react-icons/bs";
 
 const Quanlycongty_index = () => {
   const { user, setConfig, init } = useAuth();
@@ -89,8 +90,14 @@ const Quanlycongty_index = () => {
                       key={comp?.id}
                       className="flex gap-4 relative border-b py-2 border-[#cacaca]"
                     >
-                      <div className="w-10 h-10">
-                        <img src={comp?.logo} />
+                      <div className="w-10 h-10 items-center justify-center flex">
+                        {comp?.logo ? (
+                          <img src={comp?.logo} />
+                        ) : (
+                          <>
+                            <BsImage className="text-[32px] text-[#c7c7c7]" />
+                          </>
+                        )}
                       </div>
                       <div className="flex flex-col flex-1">
                         <div className="flex w-full font-medium justify-between">

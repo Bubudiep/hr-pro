@@ -7,6 +7,7 @@ import {
   Button,
   message,
   type UploadProps,
+  InputNumber,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import React, { useState, type ReactNode } from "react";
@@ -137,6 +138,25 @@ const Themmoi_congty = ({ children }: { children: ReactNode }) => {
                 value: i?.id,
               }))}
             ></Select>
+          </Form.Item>
+          <div className="mt-1 mb-1">Hình thức</div>
+          <Form.Item name="tenCongTy">
+            <Select
+              placeholder="thường xuyên/ngắn hạn"
+              options={["Thường xuyên", "Ngắn hạn"].map((e) => ({
+                label: e,
+                value: e,
+              }))}
+            />
+          </Form.Item>
+          <Form.Item name="tenCongTy">
+            <Select
+              placeholder="chính thức/thời vụ"
+              options={["Chính thức", "Thời vụ"].map((e) => ({
+                label: e,
+                value: e,
+              }))}
+            />
           </Form.Item>
           <Form.Item className="btn">
             <Button onClick={handleCancel}>Hủy</Button>

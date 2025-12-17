@@ -30,19 +30,24 @@ const Lichtuyen_index = () => {
     autoplaySpeed: 4000, // Thời gian chuyển slide
     arrows: false, // Ẩn mũi tên điều hướng
   };
+  const [searchValue, setSearchValue] = useState("");
   const [activeTab, setActiveTab] = useState<string>("all");
   const [listIP, setListIP] = useState<any[]>([]);
+  const [listCOMP, setListCOMP] = useState<any[]>([]);
   const [tinTuyen, setTinTuyen] = useState<any[]>([]);
-  const { init, loading } = useAuth();
+  const { init, loading, user } = useAuth();
   const location = useLocation();
   const params = useParams();
   useEffect(() => {
     if (!loading) {
       const fetchData = async () => {
         const qs_ip = await getData("KhuCongNghiep");
+        const qs_comp = await getData("CongTy");
         const qs_tin = await getData("TuyenDung");
+        setListCOMP(qs_comp);
         setListIP(qs_ip);
         setTinTuyen(qs_tin);
+        console.log(qs_tin);
       };
       fetchData();
     }
@@ -56,6 +61,8 @@ const Lichtuyen_index = () => {
               <LuSearch />
             </div>
             <input
+              value={searchValue}
+              onChange={(e) => setSearchValue(e?.target?.value)}
               className="outline-0 w-full"
               placeholder="Tìm công ty hoặc công việc...."
             />
@@ -73,15 +80,31 @@ const Lichtuyen_index = () => {
         </div>
         <div className="p-4">
           <Slider className="mb-8" {...settings}>
-            <div className="aspect-2/1 flex! items-center justify-center text-3xl">
-              Slide 1
-            </div>
-            <div className="aspect-2/1 flex! items-center justify-center text-3xl">
-              Slide 2
-            </div>
-            <div className="aspect-2/1 flex! items-center justify-center text-3xl">
-              Slide 3
-            </div>
+            {user?.slice?.[0]?.image && (
+              <div className="aspect-2/1 flex! items-center justify-center text-3xl">
+                <img src={user?.slice?.[0]?.image || ""} />
+              </div>
+            )}
+            {user?.slice?.[1]?.image && (
+              <div className="aspect-2/1 flex! items-center justify-center text-3xl">
+                <img src={user?.slice?.[1]?.image || ""} />
+              </div>
+            )}
+            {user?.slice?.[2]?.image && (
+              <div className="aspect-2/1 flex! items-center justify-center text-3xl">
+                <img src={user?.slice?.[2]?.image || ""} />
+              </div>
+            )}
+            {user?.slice?.[3]?.image && (
+              <div className="aspect-2/1 flex! items-center justify-center text-3xl">
+                <img src={user?.slice?.[3]?.image || ""} />
+              </div>
+            )}
+            {user?.slice?.[4]?.image && (
+              <div className="aspect-2/1 flex! items-center justify-center text-3xl">
+                <img src={user?.slice?.[4]?.image || ""} />
+              </div>
+            )}
           </Slider>
         </div>
         <div className="flex flex-col px-4">
@@ -95,8 +118,8 @@ const Lichtuyen_index = () => {
             {listIP?.map((ip) => (
               <div
                 key={ip?.id}
-                className={`item ${activeTab === ip?.name ? "active" : ""}`}
-                onClick={() => setActiveTab(ip?.name)}
+                className={`item ${activeTab === ip?.id ? "active" : ""}`}
+                onClick={() => setActiveTab(ip?.id)}
               >
                 {ip?.name}
               </div>
@@ -108,11 +131,28 @@ const Lichtuyen_index = () => {
           </div>
           <div className="lichtuyen flex mt-2">
             {tinTuyen
+              ?.filter((tin) =>
+                activeTab === "all"
+                  ? true
+                  : listCOMP?.find((c) => c?.id === tin?.companies)
+                      ?.khucongnhiep === activeTab
+              )
               ?.filter(
                 (tin) => tin?.active === true && tin?.soft_delete === false
               )
               ?.map((tin) => {
-                return <Lichtuyen_cards tin={tin} key={tin?.id} />;
+                return (
+                  <Lichtuyen_cards
+                    tin={tin}
+                    ip={listIP?.find(
+                      (ip) =>
+                        ip?.id ===
+                        listCOMP?.find((c) => c?.id === tin?.companies)
+                          ?.khucongnhiep
+                    )}
+                    key={tin?.id}
+                  />
+                );
               })}
           </div>
         </div>

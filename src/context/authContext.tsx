@@ -45,11 +45,18 @@ interface ProfileType {
 interface ConfigType {
   taskbar: boolean;
 }
+interface SliceType {
+  id: string;
+  image: string;
+  link: string;
+  created_at: string;
+}
 interface UserType {
   id: string;
   username: string;
   profile: ProfileType;
   access_token?: string | "";
+  slice?: SliceType[];
 }
 interface AuthContextType {
   user: UserType | undefined;

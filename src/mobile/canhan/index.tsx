@@ -38,92 +38,102 @@ const Canhan_index = () => {
               </div>
             </div>
           </UpdateProfile>
+          <div className="flex p-2">
+            <div className="bg-[#fcfcfc] text-[#043c7c] text-[12px] p-2 w-full rounded shadow">
+              <b className="font-medium inline">HRPRO</b> hỗ trợ người lao động:
+              <br /> - Tìm kiếm việc làm.
+              <br /> - So sánh, tìm kiếm, kiểm tra thông tin của các công ty
+              trong <b className="font-medium inline">Khu công nghiệp </b>
+              nhanh nhất, chính xác nhất.
+              <br /> - Tự chấm công và tự tính lương.
+              <br /> - Cập nhập tin tức.
+            </div>
+          </div>
           {user?.profile?.level === "admin" && <Admin_index />}
-          {user?.profile?.level === "normal" && (
-            <>
-              <div className="flex text-[12px] gap-2 items-center bg-white shadow p-2 select-none">
-                <div className="flex min-w-10 w-10 h-10 items-center bg-[#2e3236] justify-center">
-                  <MdWorkHistory size={20} color="#fff" />
-                </div>
-                <div className="flex flex-col w-full relative">
-                  <div className="flex justify-between">
-                    <div className="text-[14px] font-medium">
-                      Người đi tìm việc
-                    </div>
-                  </div>
-                  <div className="text-[12px]">
-                    Tài khoản của bạn đang là người tìm việc
+          <>
+            <div className="flex text-[12px] gap-2 items-center bg-white shadow p-2 select-none">
+              <div className="flex min-w-10 w-10 h-10 items-center bg-[#2e3236] justify-center">
+                <MdWorkHistory size={20} color="#fff" />
+              </div>
+              <div className="flex flex-col w-full relative">
+                <div className="flex justify-between">
+                  <div className="text-[14px] font-medium">
+                    Người đi tìm việc
                   </div>
                 </div>
+                <div className="text-[12px]">
+                  Tài khoản của bạn đang là người tìm việc
+                </div>
               </div>
-              <div className="flex text-[12px] flex-col bg-white shadow p-2 select-none">
-                {user?.profile?.timviec === true ? (
-                  <div
-                    className="flex text-[#235fa3] gap-2"
-                    onClick={() =>
-                      Modal.confirm({
-                        autoFocusButton: null,
-                        title: "Cảnh báo!",
-                        content:
-                          "Nhà tuyển dụng sẽ không còn tìm thấy hồ sơ của bạn nữa!",
-                        cancelText: "Đóng",
-                        okText: "Xác nhận",
-                        onOk: () => updateProfile({ timviec: false }),
-                      })
-                    }
-                  >
-                    <div className="flex min-w-10 w-10 items-center bg-[#235fa3] justify-center">
-                      <FaCheckCircle size={20} color="#fff" />
-                    </div>
-                    <div className="flex flex-col w-full relative">
-                      <div className="flex justify-between">
-                        <div className="text-[14px] font-medium">
-                          Tìm việc - đang bật
-                        </div>
-                      </div>
-                      <div className="text-[12px]">
-                        Nhà tuyển dụng có thể thấy hồ sơ của bạn
+            </div>
+            <div className="flex text-[12px] flex-col bg-white shadow p-2 select-none">
+              {user?.profile?.timviec === true ? (
+                <div
+                  className="flex text-[#235fa3] gap-2"
+                  onClick={() =>
+                    Modal.confirm({
+                      autoFocusButton: null,
+                      title: "Cảnh báo!",
+                      content:
+                        "Nhà tuyển dụng sẽ không còn tìm thấy hồ sơ của bạn nữa!",
+                      cancelText: "Đóng",
+                      okText: "Xác nhận",
+                      onOk: () => updateProfile({ timviec: false }),
+                    })
+                  }
+                >
+                  <div className="flex min-w-10 w-10 items-center bg-[#235fa3] justify-center">
+                    <FaCheckCircle size={20} color="#fff" />
+                  </div>
+                  <div className="flex flex-col w-full relative">
+                    <div className="flex justify-between">
+                      <div className="text-[14px] font-medium">
+                        Tìm việc - đang bật
                       </div>
                     </div>
-                  </div>
-                ) : (
-                  <div
-                    className="flex text-[#2e3236] gap-2"
-                    onClick={() => updateProfile({ timviec: true })}
-                  >
-                    <div className="flex min-w-10 w-10 items-center bg-[#2e3236] justify-center">
-                      <FaCircleXmark size={20} color="#fff" />
+                    <div className="text-[12px]">
+                      Nhà tuyển dụng có thể thấy hồ sơ của bạn
                     </div>
-                    <div className="flex flex-col w-full relative">
-                      <div className="flex justify-between">
-                        <div className="text-[14px] font-medium">
-                          Tìm việc - đang tắt
-                        </div>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className="flex text-[#2e3236] gap-2"
+                  onClick={() => updateProfile({ timviec: true })}
+                >
+                  <div className="flex min-w-10 w-10 items-center bg-[#2e3236] justify-center">
+                    <FaCircleXmark size={20} color="#fff" />
+                  </div>
+                  <div className="flex flex-col w-full relative">
+                    <div className="flex justify-between">
+                      <div className="text-[14px] font-medium">
+                        Tìm việc - đang tắt
                       </div>
-                      <div className="text-[12px]">Hồ sơ của bạn đang ẩn</div>
                     </div>
+                    <div className="text-[12px]">Hồ sơ của bạn đang ẩn</div>
                   </div>
-                )}
-              </div>
-              <div className="flex text-[12px] flex-col bg-white shadow select-none">
-                <div className="p-2 flex justify-between border-b border-[#eee]">
-                  <div className=" font-medium flex gap-1 items-center">
-                    <RiMapPin5Line />
-                    Kinh nghiệm làm việc
-                  </div>
-                  <button
-                    className="flex items-center justify-center border w-6 h-6 
+                </div>
+              )}
+            </div>
+            <div className="flex text-[12px] flex-col bg-white shadow select-none">
+              <div className="p-2 flex justify-between border-b border-[#eee]">
+                <div className=" font-medium flex gap-1 items-center">
+                  <RiMapPin5Line />
+                  Kinh nghiệm làm việc
+                </div>
+                <button
+                  className="flex items-center justify-center border w-6 h-6 
                     rounded border-[#0003] text-[#0005] active:text-[#07f]
                     active:border-[#07f] active:shadow active:shadow-[#0077ff6b]"
-                  >
-                    <FaPlus size={10} />
-                  </button>
+                >
+                  <FaPlus size={10} />
+                </button>
+              </div>
+              <div className="flex flex-col px-1">
+                <div className="flex flex-col border-[#eee] p-1">
+                  <div className="py-2 text-[#999]">Chưa đi làm!</div>
                 </div>
-                <div className="flex flex-col px-1">
-                  <div className="flex flex-col border-[#eee] p-1">
-                    <div className="py-2 text-[#999]">Chưa đi làm!</div>
-                  </div>
-                  {/* <div className="flex flex-col border-[#eee] p-1">
+                {/* <div className="flex flex-col border-[#eee] p-1">
                     <div className="flex justify-between">
                       <div className="time text-[#07f]">Compal</div>
                       <div className="time">01/2025 - 07/2025</div>
@@ -148,10 +158,9 @@ const Canhan_index = () => {
                       </div>
                     </div>
                   </div> */}
-                </div>
               </div>
-            </>
-          )}
+            </div>
+          </>
           <div
             className="flex w-full justify-center p-2 mt-6 items-center bg-white shadow text-[red]"
             onClick={() => {

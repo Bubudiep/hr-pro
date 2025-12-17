@@ -5,6 +5,7 @@ import { LuCalendarCheck2, LuCalendarRange } from "react-icons/lu";
 import { BsUiChecks } from "react-icons/bs";
 import { DiCodeigniter } from "react-icons/di";
 import { useAuth } from "../context/authContext";
+import { BiNews } from "react-icons/bi";
 
 const BottomTaskbar = ({
   activeTab,
@@ -49,11 +50,11 @@ const BottomTaskbar = ({
         <div className="w-16 h-14 relative flex justify-center">
           <div
             className={`main ${
-              activeTab === "news"
+              activeTab === "lichtuyen"
                 ? "text-[#008cff] shadow-[#c6edff]"
                 : "text-gray-500 hover:text-gray-800"
             }`}
-            onClick={() => setActiveTab("news")}
+            onClick={() => setActiveTab("lichtuyen")}
           >
             <DiCodeigniter className="text-[28px]" />
           </div>
@@ -61,14 +62,14 @@ const BottomTaskbar = ({
         <div
           className={
             `item ` +
-            (activeTab === "lichtuyen"
+            (activeTab === "news"
               ? "text-blue-600"
               : "text-gray-500 hover:text-gray-800")
           }
-          onClick={() => setActiveTab("lichtuyen")}
+          onClick={() => setActiveTab("news")}
         >
-          <LuCalendarRange className="text-[20px]" />
-          <span className="text-[11px]">Lịch tuyển</span>
+          <BiNews className="text-[20px]" />
+          <span className="text-[11px]">Tin tức</span>
         </div>
         <div
           className={

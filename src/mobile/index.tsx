@@ -10,14 +10,14 @@ import { useAuth } from "../context/authContext";
 import { Spin } from "antd";
 import Api from "../components/api";
 import { getData } from "../db/App_db";
-const tabOrder = ["cong", "luong", "news", "lichtuyen", "canhan"];
+const tabOrder = ["cong", "luong", "lichtuyen", "news", "canhan"];
 const Mobile_index = () => {
   const { tab } = useParams();
   const navigate = useNavigate();
   const { auto_login, loading } = useAuth();
   const [showLoad, setShowload] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState(tab || "news");
-  const { user, setInit } = useAuth();
+  const { user, setInit, setUser } = useAuth();
   useEffect(() => {
     if (tab && activeTab !== tab) {
       setActiveTab(tab);
@@ -40,6 +40,10 @@ const Mobile_index = () => {
         } else {
           console.log("Tự động đăng nhập thành công!");
         }
+      });
+      Api.get("/slice/", user?.access_token || "").then((res) => {
+        console.log(res);
+        setUser((o: any) => ({ ...o, slice: res?.results }));
       });
       const qs_ips = await getData("KhuCongNghiep");
       const qs_comp = await getData("CongTy");
@@ -74,8 +78,8 @@ const Mobile_index = () => {
           <Outlet />
           <Cong_index />
           <Luong_index />
-          <News_index />
           <Lichtuyen_index />
+          <News_index />
           <Canhan_index />
         </div>
         <BottomTaskbar activeTab={activeTab} setActiveTab={handleTabChange} />

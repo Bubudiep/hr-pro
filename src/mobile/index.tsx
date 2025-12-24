@@ -16,7 +16,7 @@ const Mobile_index = () => {
   const navigate = useNavigate();
   const { auto_login, loading } = useAuth();
   const [showLoad, setShowload] = useState<boolean>(true);
-  const [activeTab, setActiveTab] = useState(tab || "news");
+  const [activeTab, setActiveTab] = useState(tab || "lichtuyen");
   const { user, setInit, setUser } = useAuth();
   useEffect(() => {
     if (tab && activeTab !== tab) {

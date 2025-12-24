@@ -9,6 +9,7 @@ import CompanyCard from "../../components/CompanyCard";
 import { IoIosAlarm } from "react-icons/io";
 import { GiDoorHandle } from "react-icons/gi";
 import { Link, useParams } from "react-router-dom";
+import { BsBuildingsFill } from "react-icons/bs";
 
 export interface TinType {
   id: number;
@@ -100,7 +101,13 @@ const Lichtuyen_cards = ({ tin, ip }: { tin: TinType; ip: Iptype }) => {
       <div className="flex gap-2">
         <CompanyCard companyData={comp}>
           <div className="avatar relative z-1 mt-1.5">
-            <img src={comp?.logo} />
+            {comp?.logo ? (
+              <img src={comp?.logo} />
+            ) : (
+              <div className="flex flex-1 items-center justify-center bg-[#f1effc] rounded-lg shadow h-full">
+                <BsBuildingsFill className="text-[32px] text-[#a3abcc]" />
+              </div>
+            )}
           </div>
         </CompanyCard>
         <div className="information">
